@@ -1,0 +1,96 @@
+[
+  {
+    "scheme_id": "ST-TN-001",
+    "name_english": "Pudhumai Penn Scheme",
+    "name_regional": "புதுமைப் பெண் திட்டம்",
+    "department": "Social Welfare",
+    "state": "Tamil Nadu",
+    "eligibility_rules": {
+      "gender": "Female",
+      "age_range": [17, 30],
+      "income_limit_annual": null
+    },
+    "benefits": "₹1,000/month deposited to bank account until degree completion",
+    "benefits_tamil": "பட்டப்படிப்பு முடியும் வரை மாதம் ₹1,000 நேரடியாக வங்கி கணக்கில் வரவு வைக்கப்படும்",
+    "documents_required": ["Aadhaar Card", "School Bonafide Certificate", "College Admission Slip", "Bank Passbook"],
+    "documents_tamil": ["ஆதார் அட்டை", "பள்ளி பத்திர சான்றிதழ்", "கல்லூரி சேர்க்கை சீட்டு", "வங்கி பாஸ்புக் முதல் பக்கம்"],
+    "timeline": { "closing_date": "2026-10-31", "is_recurring": true },
+    "official_application_url": "https://tnscholarship.akara.co.in/index.php",
+    "application_modality": "Online via state portal or College Nodal Officer",
+    "application_modality_tamil": "மாநில இணையதளம் அல்லது கல்லூரி நோடல் அதிகாரி மூலம் விண்ணப்பிக்கலாம்"
+  },
+  {
+    "scheme_id": "ST-TN-002",
+    "name_english": "Kalaignar Magalir Urimai Thittam",
+    "name_regional": "கலைஞர் மகளிர் உரிமை திட்டம்",
+    "department": "Social Welfare",
+    "state": "Tamil Nadu",
+    "eligibility_rules": {
+      "gender": "Female",
+      "age_range": [21, 60],
+      "income_limit_annual": 200000
+    },
+    "benefits": "₹1,000/month direct benefit transfer to women household heads",
+    "benefits_tamil": "குடும்பத் தலைவியான பெண்களுக்கு மாதம் ₹1,000 நேரடி பலன் வழங்கப்படும்",
+    "documents_required": ["Aadhaar Card", "Ration Card", "Bank Passbook"],
+    "documents_tamil": ["ஆதார் அட்டை", "ரேஷன் அட்டை", "வங்கி பாஸ்புக்"],
+    "timeline": { "closing_date": "2026-07-15", "is_recurring": false },
+    "official_application_url": "https://kmut.tn.gov.in/about-kmut.html",
+    "application_modality": "Online via MakkalSevai portal",
+    "application_modality_tamil": "மக்கள் சேவை மையம் மூலம் அல்லது இணையதளம் மூலம் விண்ணப்பிக்கலாம்"
+  },
+  {
+    "scheme_id": "ST-TN-003",
+    "name_english": "Uzhavar Padhukappu Thittam",
+    "name_regional": "உழவர் பாதுகாப்பு திட்டம்",
+    "department": "Agriculture",
+    "state": "Tamil Nadu",
+    "eligibility_rules": {
+      "gender": null,
+      "age_range": [18, 70],
+      "income_limit_annual": 300000
+    },
+    "benefits": "₹2,000 annual input subsidy + crop insurance coverage",
+    "benefits_tamil": "ஆண்டுக்கு ₹2,000 உள்ளீட்டு மானியம் மற்றும் பயிர் காப்பீடு வழங்கப்படும்",
+    "documents_required": ["Aadhaar Card", "Land Patta", "Bank Passbook"],
+    "documents_tamil": ["ஆதார் அட்டை", "நில பட்டா", "வங்கி பாஸ்புக்"],
+    "timeline": { "closing_date": "2026-09-30", "is_recurring": true },
+    "official_application_url": "https://www.tnagrisnet.tn.gov.in/farmerReg/#/login",
+    "application_modality": "Through nearest Agriculture Office",
+    "application_modality_tamil": "அருகிலுள்ள வேளாண்மை அலுவலகம் மூலம் விண்ணப்பிக்கலாம்"
+  },
+  {
+  "scheme_id": "ST-TN-007",
+  "name_english": "Ilaingar Kalvi Thittam",
+  "name_regional": "Ilaingar Kalvi Thittam",
+  "department": "Education",
+  "state": "Tamil Nadu",
+  "eligibility_rules": {
+    "gender": null,
+    "age_range": [
+      20,
+      30
+    ],
+    "income_limit_annual": 299995
+  },
+  "benefits": "Tuition fee for every academic year will be reimbursed.",
+  "benefits_tamil": "Tuition fee for every academic year will be reimbursed.",
+  "documents_required": [
+    "College Bonafide.",
+    "Bank Statement",
+    "Pan Card"
+  ],
+  "documents_tamil": [
+    "College Bonafide.",
+    "Bank Statement",
+    "Pan Card"
+  ],
+  "timeline": {
+    "closing_date": null,
+    "is_recurring": false
+  },
+  "official_application_url": "tn.gov.in",
+  "application_modality": "Via College Nodal Officer",
+  "application_modality_tamil": "Via College Nodal Officer"
+}
+]

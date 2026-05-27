@@ -1,0 +1,27 @@
+@import "tailwindcss";
+
+* {
+  font-family: 'Inter', 'Noto Sans Tamil', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background: #f9fafb;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Better tap targets on mobile */
+button, a {
+  touch-action: manipulation;
+}
+
+/* Prevent iOS input zoom — must be 16px minimum */
+input, select, textarea {
+  font-size: 16px !important;
+}
