@@ -3,20 +3,20 @@
     "scheme_id": "ST-TN-001",
     "name_english": "Pudhumai Penn Scheme",
     "name_regional": "புதுமைப் பெண் திட்டம்",
-    "department": "Social Welfare",
+    "department": "Education",
     "state": "Tamil Nadu",
     "eligibility_rules": {
       "gender": "Female",
       "age_range": [17, 30],
       "income_limit_annual": null
     },
-    "benefits": "₹1,000/month deposited to bank account until degree completion",
+    "benefits": "₹1,000/month directly deposited to bank account until degree completion",
     "benefits_tamil": "பட்டப்படிப்பு முடியும் வரை மாதம் ₹1,000 நேரடியாக வங்கி கணக்கில் வரவு வைக்கப்படும்",
-    "documents_required": ["Aadhaar Card", "School Bonafide Certificate", "College Admission Slip", "Bank Passbook"],
+    "documents_required": ["Aadhaar Card", "School Bonafide Certificate", "College Admission Slip", "Bank Passbook First Page"],
     "documents_tamil": ["ஆதார் அட்டை", "பள்ளி பத்திர சான்றிதழ்", "கல்லூரி சேர்க்கை சீட்டு", "வங்கி பாஸ்புக் முதல் பக்கம்"],
-    "timeline": { "closing_date": "2026-10-31", "is_recurring": true },
-    "official_application_url": "https://tnscholarship.akara.co.in/index.php",
-    "application_modality": "Online via state portal or College Nodal Officer",
+    "timeline": { "closing_date": null, "is_recurring": true },
+    "official_application_url": "https://penkalvi.tn.gov.in/",
+    "application_modality": "Online via state portal or through College Nodal Officer",
     "application_modality_tamil": "மாநில இணையதளம் அல்லது கல்லூரி நோடல் அதிகாரி மூலம் விண்ணப்பிக்கலாம்"
   },
   {
@@ -28,69 +28,275 @@
     "eligibility_rules": {
       "gender": "Female",
       "age_range": [21, 60],
-      "income_limit_annual": 200000
+      "income_limit_annual": null
     },
-    "benefits": "₹1,000/month direct benefit transfer to women household heads",
+    "benefits": "₹1,000/month direct benefit transfer to women who are heads of household",
     "benefits_tamil": "குடும்பத் தலைவியான பெண்களுக்கு மாதம் ₹1,000 நேரடி பலன் வழங்கப்படும்",
-    "documents_required": ["Aadhaar Card", "Ration Card", "Bank Passbook"],
-    "documents_tamil": ["ஆதார் அட்டை", "ரேஷன் அட்டை", "வங்கி பாஸ்புக்"],
-    "timeline": { "closing_date": "2026-07-15", "is_recurring": false },
-    "official_application_url": "https://kmut.tn.gov.in/about-kmut.html",
-    "application_modality": "Online via MakkalSevai portal",
-    "application_modality_tamil": "மக்கள் சேவை மையம் மூலம் அல்லது இணையதளம் மூலம் விண்ணப்பிக்கலாம்"
+    "documents_required": ["Aadhaar Card", "Ration Card", "Bank Passbook", "Self Declaration Form"],
+    "documents_tamil": ["ஆதார் அட்டை", "ரேஷன் அட்டை", "வங்கி பாஸ்புக்", "சுய அறிவிப்பு படிவம்"],
+    "timeline": { "closing_date": null, "is_recurring": true },
+    "official_application_url": "https://cms.tn.gov.in/",
+    "application_modality": "Online via MakkalSevai portal or nearest government office",
+    "application_modality_tamil": "மக்கள் சேவை மையம் அல்லது அருகிலுள்ள அரசு அலுவலகம் மூலம் விண்ணப்பிக்கலாம்"
   },
   {
     "scheme_id": "ST-TN-003",
-    "name_english": "Uzhavar Padhukappu Thittam",
+    "name_english": "Uzhavar Padhukappu Thittam (Farmer Insurance)",
     "name_regional": "உழவர் பாதுகாப்பு திட்டம்",
     "department": "Agriculture",
     "state": "Tamil Nadu",
     "eligibility_rules": {
       "gender": null,
       "age_range": [18, 70],
-      "income_limit_annual": 300000
+      "income_limit_annual": null
     },
-    "benefits": "₹2,000 annual input subsidy + crop insurance coverage",
-    "benefits_tamil": "ஆண்டுக்கு ₹2,000 உள்ளீட்டு மானியம் மற்றும் பயிர் காப்பீடு வழங்கப்படும்",
-    "documents_required": ["Aadhaar Card", "Land Patta", "Bank Passbook"],
-    "documents_tamil": ["ஆதார் அட்டை", "நில பட்டா", "வங்கி பாஸ்புக்"],
-    "timeline": { "closing_date": "2026-09-30", "is_recurring": true },
-    "official_application_url": "https://www.tnagrisnet.tn.gov.in/farmerReg/#/login",
-    "application_modality": "Through nearest Agriculture Office",
-    "application_modality_tamil": "அருகிலுள்ள வேளாண்மை அலுவலகம் மூலம் விண்ணப்பிக்கலாம்"
+    "benefits": "₹2,000 annual input subsidy and crop insurance coverage up to ₹25,000",
+    "benefits_tamil": "ஆண்டுக்கு ₹2,000 உள்ளீட்டு மானியம் மற்றும் ₹25,000 வரை பயிர் காப்பீடு வழங்கப்படும்",
+    "documents_required": ["Aadhaar Card", "Land Patta", "Bank Passbook", "Community Certificate"],
+    "documents_tamil": ["ஆதார் அட்டை", "நில பட்டா", "வங்கி பாஸ்புக்", "சமுதாய சான்றிதழ்"],
+    "timeline": { "closing_date": null, "is_recurring": true },
+    "official_application_url": "https://www.tn.gov.in/scheme/data_view/6",
+    "application_modality": "Through nearest Agriculture Department office or Krishi Vigyan Kendra",
+    "application_modality_tamil": "அருகிலுள்ள வேளாண்மை துறை அலுவலகம் மூலம் விண்ணப்பிக்கலாம்"
   },
   {
-  "scheme_id": "ST-TN-007",
-  "name_english": "Ilaingar Kalvi Thittam",
-  "name_regional": "Ilaingar Kalvi Thittam",
-  "department": "Education",
-  "state": "Tamil Nadu",
-  "eligibility_rules": {
-    "gender": null,
-    "age_range": [
-      20,
-      30
-    ],
-    "income_limit_annual": 299995
+    "scheme_id": "ST-TN-004",
+    "name_english": "Chief Minister's Breakfast Scheme",
+    "name_regional": "முதலமைச்சர் காலை உணவு திட்டம்",
+    "department": "Education",
+    "state": "Tamil Nadu",
+    "eligibility_rules": {
+      "gender": null,
+      "age_range": [5, 12],
+      "income_limit_annual": null
+    },
+    "benefits": "Free nutritious breakfast every school day for all government primary school students",
+    "benefits_tamil": "அரசு தொடக்கப் பள்ளி மாணவர்களுக்கு ஒவ்வொரு பள்ளி நாளும் இலவச காலை உணவு வழங்கப்படும்",
+    "documents_required": ["School Enrollment Certificate"],
+    "documents_tamil": ["பள்ளி சேர்க்கை சான்றிதழ்"],
+    "timeline": { "closing_date": null, "is_recurring": true },
+    "official_application_url": "https://www.tn.gov.in/",
+    "application_modality": "Automatically provided at enrolled government school — no application needed",
+    "application_modality_tamil": "சேர்ந்த அரசு பள்ளியில் தானாகவே வழங்கப்படும் — விண்ணப்பம் தேவையில்லை"
   },
-  "benefits": "Tuition fee for every academic year will be reimbursed.",
-  "benefits_tamil": "Tuition fee for every academic year will be reimbursed.",
-  "documents_required": [
-    "College Bonafide.",
-    "Bank Statement",
-    "Pan Card"
-  ],
-  "documents_tamil": [
-    "College Bonafide.",
-    "Bank Statement",
-    "Pan Card"
-  ],
-  "timeline": {
-    "closing_date": null,
-    "is_recurring": false
+  {
+    "scheme_id": "ST-TN-005",
+    "name_english": "Moovalur Ramamirtham Ammaiyar Ninaivu Marriage Assistance Scheme",
+    "name_regional": "மூவலூர் ராமாமிர்தம் அம்மையார் நினைவு திருமண உதவி திட்டம்",
+    "department": "Social Welfare",
+    "state": "Tamil Nadu",
+    "eligibility_rules": {
+      "gender": "Female",
+      "age_range": [18, 30],
+      "income_limit_annual": 72000
+    },
+    "benefits": "₹50,000 total assistance — ₹25,000 cash + ₹25,000 in gold (8 grams) for marriage",
+    "benefits_tamil": "திருமணத்திற்கு மொத்தம் ₹50,000 உதவி — ₹25,000 பணம் + ₹25,000 மதிப்புள்ள 8 கிராம் தங்கம்",
+    "documents_required": ["Aadhaar Card", "Ration Card", "Income Certificate", "Community Certificate", "Marriage Registration"],
+    "documents_tamil": ["ஆதார் அட்டை", "ரேஷன் அட்டை", "வருமான சான்றிதழ்", "சமுதாய சான்றிதழ்", "திருமண பதிவு சான்றிதழ்"],
+    "timeline": { "closing_date": null, "is_recurring": true },
+    "official_application_url": "https://www.tn.gov.in/scheme/data_view/13",
+    "application_modality": "Apply at District Social Welfare Office within 6 months of marriage",
+    "application_modality_tamil": "திருமணத்திற்கு 6 மாதத்திற்குள் மாவட்ட சமூக நலன் அலுவலகத்தில் விண்ணப்பிக்கவும்"
   },
-  "official_application_url": "tn.gov.in",
-  "application_modality": "Via College Nodal Officer",
-  "application_modality_tamil": "Via College Nodal Officer"
-}
+  {
+    "scheme_id": "ST-TN-006",
+    "name_english": "Innuyir Kappu Thittam (Life Insurance for Unorganised Workers)",
+    "name_regional": "இன்னுயிர் காப்பு திட்டம்",
+    "department": "Labour and Employment",
+    "state": "Tamil Nadu",
+    "eligibility_rules": {
+      "gender": null,
+      "age_range": [18, 59],
+      "income_limit_annual": null
+    },
+    "benefits": "₹2 lakh life insurance cover. Natural death: ₹2L, Accident death: ₹4L, Disability: ₹1L",
+    "benefits_tamil": "இயற்கை மரணம்: ₹2 லட்சம், விபத்து மரணம்: ₹4 லட்சம், மாற்றுத்திறன்: ₹1 லட்சம் காப்பீடு",
+    "documents_required": ["Aadhaar Card", "Ration Card", "Bank Passbook", "Occupation Proof"],
+    "documents_tamil": ["ஆதார் அட்டை", "ரேஷன் அட்டை", "வங்கி பாஸ்புக்", "தொழில் சான்று"],
+    "timeline": { "closing_date": null, "is_recurring": true },
+    "official_application_url": "https://www.tnlc.gov.in/",
+    "application_modality": "Register at nearest Labour Department office or through employer",
+    "application_modality_tamil": "அருகிலுள்ள தொழிலாளர் துறை அலுவலகம் மூலம் பதிவு செய்யலாம்"
+  },
+  {
+    "scheme_id": "ST-TN-007",
+    "name_english": "CM's Comprehensive Health Insurance Scheme (Kalaignar Arugadal)",
+    "name_regional": "கலைஞர் அருகடல் காப்பீட்டுத் திட்டம்",
+    "department": "Health",
+    "state": "Tamil Nadu",
+    "eligibility_rules": {
+      "gender": null,
+      "age_range": [0, 100],
+      "income_limit_annual": null
+    },
+    "benefits": "Free medical treatment up to ₹5 lakh per family per year at empanelled hospitals",
+    "benefits_tamil": "ஒப்பந்தமான மருத்துவமனைகளில் குடும்பத்திற்கு ஆண்டுக்கு ₹5 லட்சம் வரை இலவச சிகிச்சை",
+    "documents_required": ["Aadhaar Card", "Ration Card"],
+    "documents_tamil": ["ஆதார் அட்டை", "ரேஷன் அட்டை"],
+    "timeline": { "closing_date": null, "is_recurring": true },
+    "official_application_url": "https://www.cmchistn.com/",
+    "application_modality": "Automatically enrolled for ration card holders — visit empanelled hospital with Aadhaar and ration card",
+    "application_modality_tamil": "ரேஷன் அட்டை வைத்திருப்பவர்களுக்கு தானாகவே பதிவாகும் — ஆதார் மற்றும் ரேஷன் அட்டையுடன் மருத்துவமனைக்கு செல்லவும்"
+  },
+  {
+    "scheme_id": "ST-TN-008",
+    "name_english": "Amma Two Wheeler Scheme",
+    "name_regional": "அம்மா இரு சக்கர வாகன திட்டம்",
+    "department": "Social Welfare",
+    "state": "Tamil Nadu",
+    "eligibility_rules": {
+      "gender": "Female",
+      "age_range": [18, 40],
+      "income_limit_annual": null
+    },
+    "benefits": "50% subsidy (up to ₹25,000) on purchase of two-wheeler for working women",
+    "benefits_tamil": "வேலை செய்யும் பெண்களுக்கு இரு சக்கர வாகனம் வாங்க 50% மானியம் (₹25,000 வரை)",
+    "documents_required": ["Aadhaar Card", "Employment Certificate", "Bank Passbook", "Driving Licence"],
+    "documents_tamil": ["ஆதார் அட்டை", "வேலை சான்றிதழ்", "வங்கி பாஸ்புக்", "ஓட்டுனர் உரிமம்"],
+    "timeline": { "closing_date": null, "is_recurring": true },
+    "official_application_url": "https://www.tn.gov.in/",
+    "application_modality": "Apply through employer or District Social Welfare Office",
+    "application_modality_tamil": "முதலாளி மூலம் அல்லது மாவட்ட சமூக நலன் அலுவலகத்தில் விண்ணப்பிக்கவும்"
+  },
+  {
+    "scheme_id": "ST-TN-009",
+    "name_english": "Dr. Muthulakshmi Reddy Maternity Benefit Scheme",
+    "name_regional": "டாக்டர் முத்துலட்சுமி ரெட்டி மகப்பேறு நல திட்டம்",
+    "department": "Health",
+    "state": "Tamil Nadu",
+    "eligibility_rules": {
+      "gender": "Female",
+      "age_range": [18, 45],
+      "income_limit_annual": null
+    },
+    "benefits": "₹18,000 total financial assistance in 3 installments during pregnancy and after delivery",
+    "benefits_tamil": "கர்ப்ப காலத்திலும் பிரசவத்திற்கு பிறகும் 3 தவணைகளில் மொத்தம் ₹18,000 நிதி உதவி",
+    "documents_required": ["Aadhaar Card", "Ration Card", "Pregnancy Certificate from Government Hospital", "Bank Passbook"],
+    "documents_tamil": ["ஆதார் அட்டை", "ரேஷன் அட்டை", "அரசு மருத்துவமனை கர்ப்ப சான்றிதழ்", "வங்கி பாஸ்புக்"],
+    "timeline": { "closing_date": null, "is_recurring": true },
+    "official_application_url": "https://www.tnhealth.tn.gov.in/",
+    "application_modality": "Register at nearest Government Hospital or Primary Health Centre during first trimester",
+    "application_modality_tamil": "முதல் மூன்று மாதத்திலேயே அருகிலுள்ள அரசு மருத்துவமனை அல்லது ஆரம்ப சுகாதார நிலையத்தில் பதிவு செய்யவும்"
+  },
+  {
+    "scheme_id": "ST-TN-010",
+    "name_english": "Thamizh Magalir Thittam (Self Help Group Loans)",
+    "name_regional": "தமிழ் மகளிர் திட்டம்",
+    "department": "Social Welfare",
+    "state": "Tamil Nadu",
+    "eligibility_rules": {
+      "gender": "Female",
+      "age_range": [18, 60],
+      "income_limit_annual": null
+    },
+    "benefits": "Interest-free loans up to ₹1.5 lakh for women Self Help Group members for business",
+    "benefits_tamil": "பெண் சுய உதவிக் குழு உறுப்பினர்களுக்கு வணிகத்திற்கு ₹1.5 லட்சம் வரை வட்டி இல்லா கடன்",
+    "documents_required": ["Aadhaar Card", "SHG Membership Certificate", "Bank Passbook", "Business Plan"],
+    "documents_tamil": ["ஆதார் அட்டை", "சுய உதவிக் குழு உறுப்பினர் சான்றிதழ்", "வங்கி பாஸ்புக்", "வணிக திட்டம்"],
+    "timeline": { "closing_date": null, "is_recurring": true },
+    "official_application_url": "https://www.tnsrlm.gov.in/",
+    "application_modality": "Apply through your registered Self Help Group to the Block Development Office",
+    "application_modality_tamil": "பதிவு செய்யப்பட்ட சுய உதவிக் குழு மூலம் வட்டார வளர்ச்சி அலுவலகத்தில் விண்ணப்பிக்கவும்"
+  },
+  {
+    "scheme_id": "ST-TN-011",
+    "name_english": "Adi Dravidar Housing Scheme",
+    "name_regional": "ஆதி திராவிட வீட்டு வசதி திட்டம்",
+    "department": "Adi Dravidar and Tribal Welfare",
+    "state": "Tamil Nadu",
+    "eligibility_rules": {
+      "gender": null,
+      "age_range": [21, 60],
+      "income_limit_annual": 100000
+    },
+    "benefits": "₹1.2 lakh grant for construction of new house for SC/ST families without pucca house",
+    "benefits_tamil": "நிரந்தர வீடு இல்லாத SC/ST குடும்பங்களுக்கு புதிய வீடு கட்ட ₹1.2 லட்சம் மானியம்",
+    "documents_required": ["Aadhaar Card", "Community Certificate (SC/ST)", "Income Certificate", "Land Documents or Site Allotment Letter", "Bank Passbook"],
+    "documents_tamil": ["ஆதார் அட்டை", "சமுதாய சான்றிதழ் (SC/ST)", "வருமான சான்றிதழ்", "நில ஆவணங்கள்", "வங்கி பாஸ்புக்"],
+    "timeline": { "closing_date": null, "is_recurring": true },
+    "official_application_url": "https://www.adi-dravidar.tn.gov.in/",
+    "application_modality": "Apply at District Adi Dravidar and Tribal Welfare Office",
+    "application_modality_tamil": "மாவட்ட ஆதி திராவிட மற்றும் பழங்குடியின நல அலுவலகத்தில் விண்ணப்பிக்கவும்"
+  },
+  {
+    "scheme_id": "ST-TN-012",
+    "name_english": "Old Age Pension Scheme (Indira Gandhi National)",
+    "name_regional": "வயோதிக ஓய்வூதிய திட்டம்",
+    "department": "Social Welfare",
+    "state": "Tamil Nadu",
+    "eligibility_rules": {
+      "gender": null,
+      "age_range": [60, 100],
+      "income_limit_annual": 100000
+    },
+    "benefits": "₹1,000/month pension for senior citizens from BPL households",
+    "benefits_tamil": "ஏழ்மை நிலையில் உள்ள மூத்த குடிமக்களுக்கு மாதம் ₹1,000 ஓய்வூதியம்",
+    "documents_required": ["Aadhaar Card", "Age Proof (Birth Certificate or School Certificate)", "Ration Card", "Bank Passbook"],
+    "documents_tamil": ["ஆதார் அட்டை", "வயது சான்று (பிறப்பு சான்றிதழ்)", "ரேஷன் அட்டை", "வங்கி பாஸ்புக்"],
+    "timeline": { "closing_date": null, "is_recurring": true },
+    "official_application_url": "https://www.tn.gov.in/scheme/data_view/22",
+    "application_modality": "Apply at nearest Revenue Divisional Office or Village Administrative Officer",
+    "application_modality_tamil": "அருகிலுள்ள வருவாய் கோட்ட அலுவலகம் அல்லது கிராம நிர்வாக அதிகாரி மூலம் விண்ணப்பிக்கவும்"
+  },
+  {
+    "scheme_id": "ST-TN-013",
+    "name_english": "Disability Pension Scheme",
+    "name_regional": "மாற்றுத்திறனாளி ஓய்வூதிய திட்டம்",
+    "department": "Social Welfare",
+    "state": "Tamil Nadu",
+    "eligibility_rules": {
+      "gender": null,
+      "age_range": [18, 100],
+      "income_limit_annual": 100000
+    },
+    "benefits": "₹1,000/month pension for persons with 40% or more disability",
+    "benefits_tamil": "40% அல்லது அதிகமான மாற்றுத்திறன் உள்ளவர்களுக்கு மாதம் ₹1,000 ஓய்வூதியம்",
+    "documents_required": ["Aadhaar Card", "Disability Certificate (40% or above)", "Ration Card", "Bank Passbook"],
+    "documents_tamil": ["ஆதார் அட்டை", "மாற்றுத்திறன் சான்றிதழ் (40% அல்லது அதிகம்)", "ரேஷன் அட்டை", "வங்கி பாஸ்புக்"],
+    "timeline": { "closing_date": null, "is_recurring": true },
+    "official_application_url": "https://www.tn.gov.in/scheme/data_view/21",
+    "application_modality": "Apply at District Social Welfare Office with disability certificate",
+    "application_modality_tamil": "மாற்றுத்திறன் சான்றிதழுடன் மாவட்ட சமூக நலன் அலுவலகத்தில் விண்ணப்பிக்கவும்"
+  },
+  {
+    "scheme_id": "ST-TN-014",
+    "name_english": "Free Bicycle Scheme for School Students",
+    "name_regional": "பள்ளி மாணவர்களுக்கு இலவச மிதிவண்டி திட்டம்",
+    "department": "Education",
+    "state": "Tamil Nadu",
+    "eligibility_rules": {
+      "gender": null,
+      "age_range": [13, 17],
+      "income_limit_annual": null
+    },
+    "benefits": "Free bicycle for students studying in Class 9 in government and government-aided schools",
+    "benefits_tamil": "அரசு மற்றும் அரசு உதவிபெறும் பள்ளிகளில் 9ம் வகுப்பு படிக்கும் மாணவர்களுக்கு இலவச மிதிவண்டி",
+    "documents_required": ["School ID Card", "Aadhaar Card"],
+    "documents_tamil": ["பள்ளி அடையாள அட்டை", "ஆதார் அட்டை"],
+    "timeline": { "closing_date": null, "is_recurring": true },
+    "official_application_url": "https://www.tn.gov.in/",
+    "application_modality": "Automatically provided through school — register with Class Teacher",
+    "application_modality_tamil": "பள்ளி வழியாக தானாகவே வழங்கப்படும் — வகுப்பு ஆசிரியரிடம் பதிவு செய்யவும்"
+  },
+  {
+    "scheme_id": "ST-TN-015",
+    "name_english": "Anaithu Grama Anna Marumalarchi Scheme (AGAMS) — Village Roads",
+    "name_regional": "அனைத்து கிராம அண்ணா மறுமலர்ச்சி திட்டம்",
+    "department": "Housing",
+    "state": "Tamil Nadu",
+    "eligibility_rules": {
+      "gender": null,
+      "age_range": [18, 100],
+      "income_limit_annual": null
+    },
+    "benefits": "Free pucca house (2 rooms + kitchen + toilet) for homeless BPL families in rural areas",
+    "benefits_tamil": "கிராமப்புற ஏழ்மை குடும்பங்களுக்கு இலவச நிரந்தர வீடு (2 அறை + சமையலறை + கழிவறை)",
+    "documents_required": ["Aadhaar Card", "Ration Card (BPL)", "Income Certificate", "No-Property Certificate", "Residential Proof"],
+    "documents_tamil": ["ஆதார் அட்டை", "ரேஷன் அட்டை (BPL)", "வருமான சான்றிதழ்", "சொத்து இல்லை சான்றிதழ்", "வசிப்பிட சான்று"],
+    "timeline": { "closing_date": null, "is_recurring": true },
+    "official_application_url": "https://www.tnhb.gov.in/",
+    "application_modality": "Apply at Block Development Office or Panchayat Office with all documents",
+    "application_modality_tamil": "அனைத்து ஆவணங்களுடன் வட்டார வளர்ச்சி அலுவலகம் அல்லது பஞ்சாயத்து அலுவலகத்தில் விண்ணப்பிக்கவும்"
+  }
 ]
