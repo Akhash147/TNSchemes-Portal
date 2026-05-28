@@ -189,10 +189,325 @@ function EmptyState({ lang, onClear }) {
     </div>
   );
 }
+// ── Eligibility Checker ───────────────────────────────────────────
+function EligibilityChecker({ scheme, lang, onClose }) {
+  const s = scheme;
+  const r = s.eligibility_rules;
 
+  // Build only the questions this scheme actually needs
+  const questions = [];
+
+  if (r.age_range) {
+    questions.push({
+      id:          "age",
+      question_en: `How old are you?`,
+      question_ta: `உங்கள் வயது என்ன?`,
+      hint_en:     `This scheme is for ages ${r.age_range[0]}–${r.age_range[1]}`,
+      hint_ta:     `இந்த திட்டம் ${r.age_range[0]}–${r.age_range[1]} வயதுக்கு உரியது`,
+      type:        "number",
+      placeholder_en: "Enter your age",
+      placeholder_ta: "உங்கள் வயதை உள்ளிடவும்",
+    });
+  }
+
+  if (r.gender) {
+    questions.push({
+      id:          "gender",
+      question_en: "What is your gender?",
+      question_ta: "உங்கள் பாலினம் என்ன?",
+      hint_en:     `This scheme is only for ${r.gender} applicants`,
+      hint_ta:     `இந்த திட்டம் ${r.gender === "Female" ? "பெண்களுக்கு" : "ஆண்களுக்கு"} மட்டுமே`,
+      type:        "choice",
+      options:     [
+        { value:"Female", label_en:"Female", label_ta:"பெண்" },
+        { value:"Male",   label_en:"Male",   label_ta:"ஆண்"  },
+      ],
+    });
+  }
+
+  if (r.income_limit_annual) {
+    questions.push({
+      id:          "income",
+      question_en: "What is your annual household income?",
+      question_ta: "உங்கள் குடும்பத்தின் ஆண்டு வருமானம் என்ன?",
+      hint_en:     `Income must be below ₹${r.income_limit_annual.toLocaleString("en-IN")}`,
+      hint_ta:     `வருமானம் ₹${r.income_limit_annual.toLocaleString("en-IN")}க்கு கீழே இருக்க வேண்டும்`,
+      type:        "choice",
+      options:     [
+        { value:"low",    label_en:`Below ₹${r.income_limit_annual.toLocaleString("en-IN")}`,  label_ta:`₹${r.income_limit_annual.toLocaleString("en-IN")}க்கு கீழே`  },
+        { value:"high",   label_en:`Above ₹${r.income_limit_annual.toLocaleString("en-IN")}`,  label_ta:`₹${r.income_limit_annual.toLocaleString("en-IN")}க்கு மேலே`  },
+      ],
+    });
+  }
+
+  const [step, setStep]       = useState(0);
+  const [answers, setAnswers] = useState({});
+  const [result, setResult]   = useState(null);
+
+  // If no eligibility rules at all — open to everyone
+  if (questions.length === 0) {
+    return (
+      <div style={{position:"fixed", inset:0, background:"rgba(0,0,0,0.55)", zIndex:200, display:"flex", alignItems:"center", justifyContent:"center", padding:"16px"}}>
+        <div style={{background:"white", borderRadius:"24px", padding:"28px 24px", maxWidth:"400px", width:"100%", boxShadow:"0 20px 60px rgba(0,0,0,0.2)"}}>
+          <div style={{textAlign:"center"}}>
+            <div style={{fontSize:"56px", marginBottom:"12px"}}>✅</div>
+            <p style={{fontSize:"18px", fontWeight:"700", color:"#166534", margin:"0 0 8px"}}>
+              {lang === 1 ? "நீங்கள் தகுதியானவர்!" : "You qualify!"}
+            </p>
+            <p style={{fontSize:"13px", color:"#6b7280", margin:"0 0 20px", lineHeight:"1.6"}}>
+              {lang === 1
+                ? "இந்த திட்டம் அனைவருக்கும் திறந்திருக்கிறது. உடனே விண்ணப்பிக்கலாம்."
+                : "This scheme is open to everyone. You can apply right away."}
+            </p>
+            <a href={s.official_application_url} target="_blank" rel="noopener noreferrer"
+              style={{display:"block", background:"#15803d", color:"white", borderRadius:"12px", padding:"12px", fontSize:"14px", fontWeight:"600", textDecoration:"none", marginBottom:"10px"}}>
+              {lang === 1 ? "இப்போது விண்ணப்பிக்க ↗" : "Apply Now ↗"}
+            </a>
+            <button onClick={onClose} style={{background:"none", border:"none", fontSize:"13px", color:"#9ca3af", cursor:"pointer"}}>
+              {lang === 1 ? "மூடு" : "Close"}
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  function answer(val) {
+    const q          = questions[step];
+    const newAnswers = { ...answers, [q.id]: val };
+    setAnswers(newAnswers);
+
+    if (step < questions.length - 1) {
+      setStep(s => s + 1);
+    } else {
+      // All answered — compute result
+      setResult(evaluate(newAnswers));
+    }
+  }
+
+  function evaluate(ans) {
+    const reasons    = [];
+    const isTamil    = lang === 1;
+    let   qualifies  = true;
+
+    if (r.age_range && ans.age !== undefined) {
+      const age = parseInt(ans.age);
+      if (isNaN(age) || age < r.age_range[0] || age > r.age_range[1]) {
+        qualifies = false;
+        reasons.push(
+          isTamil
+            ? `வயது தகுதி இல்லை — இந்த திட்டம் ${r.age_range[0]}–${r.age_range[1]} வயதுக்கு மட்டுமே`
+            : `Age not eligible — scheme is for ages ${r.age_range[0]}–${r.age_range[1]} only`
+        );
+      }
+    }
+
+    if (r.gender && ans.gender) {
+      if (ans.gender !== r.gender) {
+        qualifies = false;
+        reasons.push(
+          isTamil
+            ? `பாலினம் தகுதி இல்லை — இந்த திட்டம் ${r.gender === "Female" ? "பெண்களுக்கு" : "ஆண்களுக்கு"} மட்டுமே`
+            : `Gender not eligible — scheme is for ${r.gender} applicants only`
+        );
+      }
+    }
+
+    if (r.income_limit_annual && ans.income) {
+      if (ans.income === "high") {
+        qualifies = false;
+        reasons.push(
+          isTamil
+            ? `வருமான வரம்பு மீறியது — ₹${r.income_limit_annual.toLocaleString("en-IN")}க்கு கீழே இருக்க வேண்டும்`
+            : `Income too high — must be below ₹${r.income_limit_annual.toLocaleString("en-IN")}`
+        );
+      }
+    }
+
+    return { qualifies, reasons };
+  }
+
+  function restart() {
+    setStep(0);
+    setAnswers({});
+    setResult(null);
+  }
+
+  const q       = questions[step];
+  const isTamil = lang === 1;
+
+  return (
+    <div style={{position:"fixed", inset:0, background:"rgba(0,0,0,0.55)", zIndex:200, display:"flex", alignItems:"center", justifyContent:"center", padding:"16px"}}>
+      <div style={{background:"white", borderRadius:"24px", padding:"0", maxWidth:"420px", width:"100%", boxShadow:"0 20px 60px rgba(0,0,0,0.2)", overflow:"hidden"}}>
+
+        {/* Header */}
+        <div style={{background:"linear-gradient(135deg, #0d6e4f, #1a8a63)", padding:"20px 24px"}}>
+          <div style={{display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:"12px"}}>
+            <p style={{fontSize:"14px", fontWeight:"700", color:"white", margin:"0"}}>
+              🎯 {isTamil ? "தகுதி சரிபார்ப்பு" : "Eligibility Check"}
+            </p>
+            <button onClick={onClose} style={{background:"rgba(255,255,255,0.2)", border:"none", borderRadius:"8px", width:"28px", height:"28px", cursor:"pointer", color:"white", fontSize:"14px", display:"flex", alignItems:"center", justifyContent:"center"}}>
+              ✕
+            </button>
+          </div>
+          <p style={{fontSize:"12px", color:"rgba(255,255,255,0.8)", margin:"0 0 12px", lineHeight:"1.4"}}>
+            {isTamil ? s.name_regional : s.name_english}
+          </p>
+          {/* Progress bar */}
+          {!result && (
+            <div style={{background:"rgba(255,255,255,0.2)", borderRadius:"999px", height:"4px"}}>
+              <div style={{background:"white", borderRadius:"999px", height:"4px", width:`${((step) / questions.length) * 100}%`, transition:"width 0.3s"}} />
+            </div>
+          )}
+        </div>
+
+        <div style={{padding:"24px"}}>
+          {/* Result screen */}
+          {result ? (
+            <div style={{textAlign:"center"}}>
+              {result.qualifies ? (
+                <>
+                  <div style={{fontSize:"56px", marginBottom:"12px"}}>✅</div>
+                  <p style={{fontSize:"20px", fontWeight:"700", color:"#166534", margin:"0 0 6px"}}>
+                    {isTamil ? "நீங்கள் தகுதியானவர்!" : "You qualify!"}
+                  </p>
+                  <p style={{fontSize:"13px", color:"#6b7280", margin:"0 0 6px"}}>
+                    {isTamil ? "இந்த திட்டத்திற்கு உடனே விண்ணப்பிக்கலாம்." : "You can apply for this scheme right away."}
+                  </p>
+
+                  {/* Next steps */}
+                  <div style={{background:"#f0fdf4", border:"1px solid #bbf7d0", borderRadius:"12px", padding:"14px", marginBottom:"16px", textAlign:"left"}}>
+                    <p style={{fontSize:"11px", fontWeight:"700", color:"#166534", margin:"0 0 8px", textTransform:"uppercase", letterSpacing:"0.06em"}}>
+                      {isTamil ? "அடுத்த படிகள்" : "Next steps"}
+                    </p>
+                    <p style={{fontSize:"12px", color:"#166534", margin:"0 0 6px", lineHeight:"1.6"}}>
+                      📋 {isTamil ? "தேவையான ஆவணங்களை சேகரிக்கவும்" : "Gather the required documents"}
+                    </p>
+                    <p style={{fontSize:"12px", color:"#166534", margin:"0 0 6px", lineHeight:"1.6"}}>
+                      🗺 {isTamil
+                        ? (s.application_modality_tamil || s.application_modality)
+                        : s.application_modality}
+                    </p>
+                  </div>
+
+                  <a href={s.official_application_url} target="_blank" rel="noopener noreferrer"
+                    style={{display:"block", background:"#15803d", color:"white", borderRadius:"12px", padding:"13px", fontSize:"14px", fontWeight:"600", textDecoration:"none", marginBottom:"10px", boxShadow:"0 2px 8px rgba(13,110,79,0.3)"}}>
+                    {isTamil ? "இப்போது விண்ணப்பிக்க ↗" : "Apply Now ↗"}
+                  </a>
+                </>
+              ) : (
+                <>
+                  <div style={{fontSize:"56px", marginBottom:"12px"}}>❌</div>
+                  <p style={{fontSize:"20px", fontWeight:"700", color:"#b91c1c", margin:"0 0 6px"}}>
+                    {isTamil ? "தகுதி இல்லை" : "Not eligible"}
+                  </p>
+                  <p style={{fontSize:"13px", color:"#6b7280", margin:"0 0 12px"}}>
+                    {isTamil ? "இந்த திட்டத்திற்கு நீங்கள் தகுதியற்றவர்." : "You don't meet the criteria for this scheme."}
+                  </p>
+
+                  {/* Reasons */}
+                  <div style={{background:"#fef2f2", border:"1px solid #fecaca", borderRadius:"12px", padding:"14px", marginBottom:"16px", textAlign:"left"}}>
+                    <p style={{fontSize:"11px", fontWeight:"700", color:"#b91c1c", margin:"0 0 8px", textTransform:"uppercase", letterSpacing:"0.06em"}}>
+                      {isTamil ? "காரணம்" : "Reason"}
+                    </p>
+                    {result.reasons.map((r, i) => (
+                      <p key={i} style={{fontSize:"12px", color:"#b91c1c", margin:"0 0 4px", lineHeight:"1.6"}}>
+                        • {r}
+                      </p>
+                    ))}
+                  </div>
+
+                  <div style={{background:"#fffbeb", border:"1px solid #fcd34d", borderRadius:"12px", padding:"12px", marginBottom:"16px", textAlign:"left"}}>
+                    <p style={{fontSize:"12px", color:"#92400e", margin:"0", lineHeight:"1.6"}}>
+                      💡 {isTamil
+                        ? "மற்ற திட்டங்களை பார்க்க, தகுதி கணிப்பானை பயன்படுத்துங்கள்."
+                        : "Use the eligibility calculator to find schemes you do qualify for."}
+                    </p>
+                  </div>
+                </>
+              )}
+
+              <div style={{display:"flex", gap:"8px"}}>
+                <button onClick={restart}
+                  style={{flex:1, background:"none", border:"1px solid #e5e7eb", borderRadius:"10px", padding:"10px", fontSize:"13px", color:"#6b7280", cursor:"pointer"}}>
+                  {isTamil ? "மீண்டும் முயற்சி" : "Try again"}
+                </button>
+                <button onClick={onClose}
+                  style={{flex:1, background:"#f3f4f6", border:"none", borderRadius:"10px", padding:"10px", fontSize:"13px", color:"#374151", cursor:"pointer", fontWeight:"500"}}>
+                  {isTamil ? "மூடு" : "Close"}
+                </button>
+              </div>
+            </div>
+
+          ) : (
+            /* Question screen */
+            <div>
+              <p style={{fontSize:"16px", fontWeight:"700", color:"#1a1a2e", margin:"0 0 4px", lineHeight:"1.4"}}>
+                {isTamil ? q.question_ta : q.question_en}
+              </p>
+              <p style={{fontSize:"12px", color:"#9ca3af", margin:"0 0 20px", lineHeight:"1.5"}}>
+                💡 {isTamil ? q.hint_ta : q.hint_en}
+              </p>
+
+              {q.type === "number" && (
+                <div>
+                  <input
+                    type="number"
+                    placeholder={isTamil ? q.placeholder_ta : q.placeholder_en}
+                    autoFocus
+                    style={{width:"100%", border:"1.5px solid #d1d5db", borderRadius:"12px", padding:"14px", fontSize:"20px", textAlign:"center", boxSizing:"border-box", outline:"none", color:"#1a1a2e", marginBottom:"14px", fontWeight:"600"}}
+                    onKeyDown={e => { if (e.key === "Enter" && e.target.value) answer(e.target.value); }}
+                    id="checker-input"
+                  />
+                  <button
+                    onClick={() => {
+                      const val = document.getElementById("checker-input").value;
+                      if (val) answer(val);
+                    }}
+                    style={{width:"100%", background:"#15803d", color:"white", border:"none", borderRadius:"12px", padding:"13px", fontSize:"14px", fontWeight:"600", cursor:"pointer"}}>
+                    {isTamil ? "அடுத்து →" : "Next →"}
+                  </button>
+                </div>
+              )}
+
+              {q.type === "choice" && (
+                <div style={{display:"flex", flexDirection:"column", gap:"10px"}}>
+                  {q.options.map(opt => (
+                    <button key={opt.value} onClick={() => answer(opt.value)}
+                      style={{
+                        width:"100%", border:"1.5px solid #e5e7eb", borderRadius:"14px",
+                        padding:"16px", fontSize:"15px", fontWeight:"600", cursor:"pointer",
+                        background:"white", color:"#1a1a2e", textAlign:"left",
+                        display:"flex", alignItems:"center", gap:"12px",
+                        transition:"all 0.1s",
+                      }}
+                      onMouseEnter={e => { e.currentTarget.style.borderColor="#15803d"; e.currentTarget.style.background="#f0fdf4"; }}
+                      onMouseLeave={e => { e.currentTarget.style.borderColor="#e5e7eb"; e.currentTarget.style.background="white"; }}
+                    >
+                      <span style={{width:"32px", height:"32px", borderRadius:"50%", background:"#f0fdf4", display:"flex", alignItems:"center", justifyContent:"center", fontSize:"16px", flexShrink:0}}>
+                        {opt.value === "Female" ? "👩" : opt.value === "Male" ? "👨" : opt.value === "low" ? "✓" : "✗"}
+                      </span>
+                      {isTamil ? opt.label_ta : opt.label_en}
+                    </button>
+                  ))}
+                </div>
+              )}
+
+              {/* Step indicator */}
+              <p style={{textAlign:"center", fontSize:"12px", color:"#9ca3af", marginTop:"16px"}}>
+                {isTamil ? `கேள்வி ${step + 1} / ${questions.length}` : `Question ${step + 1} of ${questions.length}`}
+              </p>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
 // ── Scheme card ───────────────────────────────────────────────────
 function SchemeCard({ scheme, lang, expanded, onToggle }) {
   const s  = scheme;
+  const [checkerOpen, setCheckerOpen] = useState(false);
   const dt = deptTheme(s.department);
   const name    = lang === 1 ? s.name_regional : s.name_english;
   const subname = lang === 1 ? s.name_english  : s.name_regional;
@@ -235,6 +550,18 @@ function SchemeCard({ scheme, lang, expanded, onToggle }) {
               {expanded ? tx("hideDetails", lang) : tx("seeDetails", lang)}
             </button>
           </div>
+          <button
+  onClick={() => setCheckerOpen(true)}
+  style={{
+    display:"inline-flex", alignItems:"center", gap:"4px",
+    background:"white", color:C.primary,
+    border:`1.5px solid ${C.primary}`,
+    borderRadius:"10px", padding:"8px 14px",
+    fontSize:"12px", fontWeight:"600", cursor:"pointer",
+  }}
+>
+  🎯 {lang === 1 ? "தகுதி உண்டா?" : "Am I eligible?"}
+</button>
           <a href={s.official_application_url} target="_blank" rel="noopener noreferrer"
             style={{
               display:"inline-flex", alignItems:"center", gap:"4px",
@@ -304,6 +631,13 @@ function SchemeCard({ scheme, lang, expanded, onToggle }) {
             </p>
           </div>
         </div>
+      )}
+      {checkerOpen && (
+        <EligibilityChecker
+          scheme={s}
+          lang={lang}
+          onClose={() => setCheckerOpen(false)}
+        />
       )}
     </div>
   );
