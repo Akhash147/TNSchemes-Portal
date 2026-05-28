@@ -1,5 +1,26 @@
 @import "tailwindcss";
 
+:root {
+  --fs-body:  13px;
+  --fs-title: 15px;
+  --fs-small: 11px;
+  --fs-card:  14px;
+}
+
+:root[data-fontsize="large"] {
+  --fs-body:  15px;
+  --fs-title: 17px;
+  --fs-small: 13px;
+  --fs-card:  16px;
+}
+
+:root[data-fontsize="xl"] {
+  --fs-body:  17px;
+  --fs-title: 19px;
+  --fs-small: 14px;
+  --fs-card:  18px;
+}
+
 * {
   font-family: 'Inter', 'Noto Sans Tamil', sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -12,16 +33,8 @@ body {
   background: #f9fafb;
 }
 
-html {
-  scroll-behavior: smooth;
-}
+html { scroll-behavior: smooth; }
 
-/* Better tap targets on mobile */
-button, a {
-  touch-action: manipulation;
-}
+button, a { touch-action: manipulation; }
 
-/* Prevent iOS input zoom — must be 16px minimum */
-input, select, textarea {
-  font-size: 16px !important;
-}
+input, select, textarea { font-size: 16px !important; }

@@ -1,6 +1,13 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import schemesData from "./data/schemes.json";
 import OnboardingModal from "./components/OnboardingModal.jsx";
+
+// ── Font sizes ────────────────────────────────────────────────────
+const FONT_SIZES = {
+  normal: { label:"A"  },
+  large:  { label:"A+" },
+  xl:     { label:"A++"},
+};
 
 // ── Design tokens ─────────────────────────────────────────────────
 const C = {
@@ -25,14 +32,14 @@ const C = {
 };
 
 const DEPT_THEMES = {
-  "Social Welfare":             { bg:"#fdf4ff", color:"#7e22ce", border:"#e9d5ff", icon:"🤝" },
-  "Agriculture":                { bg:"#f0fdf4", color:"#166534", border:"#bbf7d0", icon:"🌾" },
-  "Education":                  { bg:"#eff6ff", color:"#1e40af", border:"#bfdbfe", icon:"📚" },
-  "Health":                     { bg:"#fff1f2", color:"#be123c", border:"#fecdd3", icon:"🏥" },
-  "Housing":                    { bg:"#fff7ed", color:"#c2410c", border:"#fed7aa", icon:"🏠" },
-  "Labour and Employment":      { bg:"#f0f9ff", color:"#0369a1", border:"#bae6fd", icon:"💼" },
+  "Social Welfare":                  { bg:"#fdf4ff", color:"#7e22ce", border:"#e9d5ff", icon:"🤝" },
+  "Agriculture":                     { bg:"#f0fdf4", color:"#166534", border:"#bbf7d0", icon:"🌾" },
+  "Education":                       { bg:"#eff6ff", color:"#1e40af", border:"#bfdbfe", icon:"📚" },
+  "Health":                          { bg:"#fff1f2", color:"#be123c", border:"#fecdd3", icon:"🏥" },
+  "Housing":                         { bg:"#fff7ed", color:"#c2410c", border:"#fed7aa", icon:"🏠" },
+  "Labour and Employment":           { bg:"#f0f9ff", color:"#0369a1", border:"#bae6fd", icon:"💼" },
   "Adi Dravidar and Tribal Welfare": { bg:"#fefce8", color:"#854d0e", border:"#fef08a", icon:"🌿" },
-  "Backward Classes Welfare":   { bg:"#fdf4ff", color:"#86198f", border:"#f0abfc", icon:"⭐" },
+  "Backward Classes Welfare":        { bg:"#fdf4ff", color:"#86198f", border:"#f0abfc", icon:"⭐" },
 };
 const deptTheme = (dept) => DEPT_THEMES[dept] ?? { bg:"#f8fafc", color:"#374151", border:"#e5e7eb", icon:"📋" };
 
@@ -88,11 +95,11 @@ function daysUntil(dateStr) {
 
 function useIsMobile() {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
-  useState(() => {
+  useEffect(() => {
     const h = () => setIsMobile(window.innerWidth < 768);
     window.addEventListener("resize", h);
     return () => window.removeEventListener("resize", h);
-  });
+  }, []);
   return isMobile;
 }
 
@@ -100,43 +107,23 @@ function useIsMobile() {
 function DeadlineBadge({ scheme, lang }) {
   const days = daysUntil(scheme.timeline?.closing_date);
   if (!scheme.timeline?.closing_date)
-    return (
-      <span style={{fontSize:"11px", color:C.textMuted, background:C.surface, padding:"3px 8px", borderRadius:"6px"}}>
-        ∞ {tx("ongoing", lang)}
-      </span>
-    );
+    return <span style={{fontSize:"var(--fs-small)", color:C.textMuted, background:C.surface, padding:"3px 8px", borderRadius:"6px"}}>∞ {tx("ongoing", lang)}</span>;
   if (days < 0)
-    return (
-      <span style={{fontSize:"11px", color:C.red, background:C.redLight, padding:"3px 8px", borderRadius:"6px", fontWeight:"500"}}>
-        ✕ {lang === 1 ? "காலாவதியானது" : "Expired"}
-      </span>
-    );
+    return <span style={{fontSize:"var(--fs-small)", color:C.red, background:C.redLight, padding:"3px 8px", borderRadius:"6px", fontWeight:"500"}}>✕ {lang === 1 ? "காலாவதியானது" : "Expired"}</span>;
   if (days <= 14)
-    return (
-      <span style={{fontSize:"11px", color:C.red, background:C.redLight, border:`1px solid ${C.redBorder}`, padding:"3px 10px", borderRadius:"6px", fontWeight:"600"}}>
-        ⚠ {lang === 1 ? `${days} நாட்கள் மட்டுமே` : `${days} days left!`}
-      </span>
-    );
+    return <span style={{fontSize:"var(--fs-small)", color:C.red, background:C.redLight, border:`1px solid ${C.redBorder}`, padding:"3px 10px", borderRadius:"6px", fontWeight:"600"}}>⚠ {lang === 1 ? `${days} நாட்கள் மட்டுமே` : `${days} days left!`}</span>;
   if (days <= 60)
-    return (
-      <span style={{fontSize:"11px", color:C.amber, background:C.amberLight, border:`1px solid ${C.amberBorder}`, padding:"3px 10px", borderRadius:"6px", fontWeight:"500"}}>
-        ◷ {lang === 1 ? `${days} நாட்களில் முடிகிறது` : `${days} days left`}
-      </span>
-    );
-  return (
-    <span style={{fontSize:"11px", color:C.textMuted, background:C.surface, padding:"3px 8px", borderRadius:"6px"}}>
-      📅 {tx("closes", lang)} {scheme.timeline.closing_date}
-    </span>
-  );
+    return <span style={{fontSize:"var(--fs-small)", color:C.amber, background:C.amberLight, border:`1px solid ${C.amberBorder}`, padding:"3px 10px", borderRadius:"6px", fontWeight:"500"}}>◷ {lang === 1 ? `${days} நாட்களில் முடிகிறது` : `${days} days left`}</span>;
+  return <span style={{fontSize:"var(--fs-small)", color:C.textMuted, background:C.surface, padding:"3px 8px", borderRadius:"6px"}}>📅 {tx("closes", lang)} {scheme.timeline.closing_date}</span>;
 }
 
-// ── Hero stat card ────────────────────────────────────────────────
+// ── Stat card ─────────────────────────────────────────────────────
 function StatCard({ value, label, icon, bg, color }) {
   return (
     <div style={{background:bg, borderRadius:"16px", padding:"16px 12px", textAlign:"center", flex:1}}>
       <div style={{fontSize:"22px", marginBottom:"4px"}}>{icon}</div>
       <p style={{fontSize:"24px", fontWeight:"700", color, margin:"0", lineHeight:"1"}}>{value}</p>
-      <p style={{fontSize:"11px", color, margin:"6px 0 0", opacity:"0.75", lineHeight:"1.3", fontWeight:"500"}}>{label}</p>
+      <p style={{fontSize:"var(--fs-small)", color, margin:"6px 0 0", opacity:"0.75", lineHeight:"1.3", fontWeight:"500"}}>{label}</p>
     </div>
   );
 }
@@ -146,12 +133,11 @@ function StatBar({ data, lang }) {
   const openNow = data.filter(s => { const d = daysUntil(s.timeline?.closing_date); return d === null || d > 0; }).length;
   const depts   = new Set(data.map(s => s.department)).size;
   const urgent  = data.filter(s => { const d = daysUntil(s.timeline?.closing_date); return d !== null && d <= 14 && d > 0; }).length;
-
   return (
     <div style={{display:"flex", gap:"10px", marginBottom:"20px", overflowX:"auto", paddingBottom:"4px"}}>
       <StatCard value={total}   label={tx("totalSchemes", lang)} icon="📋" bg="#e6f4ef" color={C.primary} />
       <StatCard value={openNow} label={tx("openNow",      lang)} icon="✅" bg="#ecfdf5" color="#059669" />
-      <StatCard value={depts}   label={tx("departments",  lang)} icon="🏛" bg="#eff6ff" color="#1d4ed8" />
+      <StatCard value={depts}   label={tx("departments",  lang)} icon="🏛"  bg="#eff6ff" color="#1d4ed8" />
       <StatCard value={urgent}  label={tx("urgentClose",  lang)} icon="⏰" bg={C.redLight} color={C.red} />
     </div>
   );
@@ -162,13 +148,12 @@ function Chip({ label, active, onClick, icon }) {
   return (
     <button onClick={onClick} style={{
       display:"inline-flex", alignItems:"center", gap:"4px",
-      fontSize:"12px", padding:"6px 12px", borderRadius:"999px", cursor:"pointer",
+      fontSize:"var(--fs-small)", padding:"6px 12px", borderRadius:"999px", cursor:"pointer",
       border:     active ? `1.5px solid ${C.primary}` : `1px solid ${C.border}`,
       background: active ? C.primaryLight : C.white,
       color:      active ? C.primary : C.textSub,
       fontWeight: active ? "600" : "400",
       whiteSpace: "nowrap",
-      transition: "all 0.15s",
     }}>
       {icon && <span>{icon}</span>}
       {label}
@@ -181,61 +166,56 @@ function EmptyState({ lang, onClear }) {
   return (
     <div style={{textAlign:"center", padding:"60px 20px", background:C.white, borderRadius:"20px", border:`1px solid ${C.border}`}}>
       <div style={{fontSize:"48px", marginBottom:"12px"}}>🔍</div>
-      <p style={{fontSize:"16px", fontWeight:"600", color:C.text, marginBottom:"6px"}}>{tx("noResults", lang)}</p>
-      <p style={{fontSize:"13px", color:C.textMuted, marginBottom:"20px"}}>{tx("noResultsSub", lang)}</p>
-      <button onClick={onClear} style={{background:C.primary, color:C.white, border:"none", borderRadius:"10px", padding:"10px 24px", fontSize:"13px", fontWeight:"500", cursor:"pointer"}}>
+      <p style={{fontSize:"var(--fs-title)", fontWeight:"600", color:C.text, marginBottom:"6px"}}>{tx("noResults", lang)}</p>
+      <p style={{fontSize:"var(--fs-body)", color:C.textMuted, marginBottom:"20px"}}>{tx("noResultsSub", lang)}</p>
+      <button onClick={onClear} style={{background:C.primary, color:C.white, border:"none", borderRadius:"10px", padding:"10px 24px", fontSize:"var(--fs-body)", fontWeight:"500", cursor:"pointer"}}>
         {tx("clearAll", lang)}
       </button>
     </div>
   );
 }
-// ── Eligibility Checker ───────────────────────────────────────────
+
+// ── Eligibility checker ───────────────────────────────────────────
 function EligibilityChecker({ scheme, lang, onClose }) {
   const s = scheme;
   const r = s.eligibility_rules;
+  const isTamil = lang === 1;
 
-  // Build only the questions this scheme actually needs
   const questions = [];
-
   if (r.age_range) {
     questions.push({
-      id:          "age",
-      question_en: `How old are you?`,
-      question_ta: `உங்கள் வயது என்ன?`,
-      hint_en:     `This scheme is for ages ${r.age_range[0]}–${r.age_range[1]}`,
-      hint_ta:     `இந்த திட்டம் ${r.age_range[0]}–${r.age_range[1]} வயதுக்கு உரியது`,
-      type:        "number",
+      id: "age", type: "number",
+      question_en: "How old are you?",
+      question_ta: "உங்கள் வயது என்ன?",
+      hint_en: `This scheme is for ages ${r.age_range[0]}–${r.age_range[1]}`,
+      hint_ta: `இந்த திட்டம் ${r.age_range[0]}–${r.age_range[1]} வயதுக்கு உரியது`,
       placeholder_en: "Enter your age",
       placeholder_ta: "உங்கள் வயதை உள்ளிடவும்",
     });
   }
-
   if (r.gender) {
     questions.push({
-      id:          "gender",
+      id: "gender", type: "choice",
       question_en: "What is your gender?",
       question_ta: "உங்கள் பாலினம் என்ன?",
-      hint_en:     `This scheme is only for ${r.gender} applicants`,
-      hint_ta:     `இந்த திட்டம் ${r.gender === "Female" ? "பெண்களுக்கு" : "ஆண்களுக்கு"} மட்டுமே`,
-      type:        "choice",
-      options:     [
-        { value:"Female", label_en:"Female", label_ta:"பெண்" },
-        { value:"Male",   label_en:"Male",   label_ta:"ஆண்"  },
+      hint_en: `This scheme is only for ${r.gender} applicants`,
+      hint_ta: `இந்த திட்டம் ${r.gender === "Female" ? "பெண்களுக்கு" : "ஆண்களுக்கு"} மட்டுமே`,
+      options: [
+        { value:"Female", label_en:"Female", label_ta:"பெண்", icon:"👩" },
+        { value:"Male",   label_en:"Male",   label_ta:"ஆண்",  icon:"👨" },
       ],
     });
   }
-
   if (r.income_limit_annual) {
     questions.push({
-      id:          "income",
+      id: "income", type: "choice",
       question_en: "What is your annual household income?",
       question_ta: "உங்கள் குடும்பத்தின் ஆண்டு வருமானம் என்ன?",
-      hint_en:     `Income must be below ₹${r.income_limit_annual.toLocaleString("en-IN")}`,
-      hint_ta:     `வருமானம் ₹${r.income_limit_annual.toLocaleString("en-IN")}க்கு கீழே இருக்க வேண்டும்`,
-      type:        "choice",
-      options:     [
-        { value:"low",    label_en:`Below ₹${r.income_limit_annual.toLocaleString("en-IN")}`,  label_ta:`₹${r.income_limit_annual.toLocaleString("en-IN")}க்கு கீழே`  },
-        { value:"high",   label_en:`Above ₹${r.income_limit_annual.toLocaleString("en-IN")}`,  label_ta:`₹${r.income_limit_annual.toLocaleString("en-IN")}க்கு மேலே`  },
+      hint_en: `Income must be below ₹${r.income_limit_annual.toLocaleString("en-IN")}`,
+      hint_ta: `வருமானம் ₹${r.income_limit_annual.toLocaleString("en-IN")}க்கு கீழே இருக்க வேண்டும்`,
+      options: [
+        { value:"low",  label_en:`Below ₹${r.income_limit_annual.toLocaleString("en-IN")}`, label_ta:`₹${r.income_limit_annual.toLocaleString("en-IN")}க்கு கீழே`, icon:"✓" },
+        { value:"high", label_en:`Above ₹${r.income_limit_annual.toLocaleString("en-IN")}`, label_ta:`₹${r.income_limit_annual.toLocaleString("en-IN")}க்கு மேலே`, icon:"✗" },
       ],
     });
   }
@@ -244,210 +224,133 @@ function EligibilityChecker({ scheme, lang, onClose }) {
   const [answers, setAnswers] = useState({});
   const [result, setResult]   = useState(null);
 
-  // If no eligibility rules at all — open to everyone
-  if (questions.length === 0) {
-    return (
-      <div style={{position:"fixed", inset:0, background:"rgba(0,0,0,0.55)", zIndex:200, display:"flex", alignItems:"center", justifyContent:"center", padding:"16px"}}>
-        <div style={{background:"white", borderRadius:"24px", padding:"28px 24px", maxWidth:"400px", width:"100%", boxShadow:"0 20px 60px rgba(0,0,0,0.2)"}}>
-          <div style={{textAlign:"center"}}>
-            <div style={{fontSize:"56px", marginBottom:"12px"}}>✅</div>
-            <p style={{fontSize:"18px", fontWeight:"700", color:"#166534", margin:"0 0 8px"}}>
-              {lang === 1 ? "நீங்கள் தகுதியானவர்!" : "You qualify!"}
-            </p>
-            <p style={{fontSize:"13px", color:"#6b7280", margin:"0 0 20px", lineHeight:"1.6"}}>
-              {lang === 1
-                ? "இந்த திட்டம் அனைவருக்கும் திறந்திருக்கிறது. உடனே விண்ணப்பிக்கலாம்."
-                : "This scheme is open to everyone. You can apply right away."}
-            </p>
-            <a href={s.official_application_url} target="_blank" rel="noopener noreferrer"
-              style={{display:"block", background:"#15803d", color:"white", borderRadius:"12px", padding:"12px", fontSize:"14px", fontWeight:"600", textDecoration:"none", marginBottom:"10px"}}>
-              {lang === 1 ? "இப்போது விண்ணப்பிக்க ↗" : "Apply Now ↗"}
-            </a>
-            <button onClick={onClose} style={{background:"none", border:"none", fontSize:"13px", color:"#9ca3af", cursor:"pointer"}}>
-              {lang === 1 ? "மூடு" : "Close"}
-            </button>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   function answer(val) {
-    const q          = questions[step];
+    const q = questions[step];
     const newAnswers = { ...answers, [q.id]: val };
     setAnswers(newAnswers);
-
     if (step < questions.length - 1) {
       setStep(s => s + 1);
     } else {
-      // All answered — compute result
       setResult(evaluate(newAnswers));
     }
   }
 
   function evaluate(ans) {
-    const reasons    = [];
-    const isTamil    = lang === 1;
-    let   qualifies  = true;
-
+    let qualifies = true;
+    const reasons = [];
     if (r.age_range && ans.age !== undefined) {
       const age = parseInt(ans.age);
       if (isNaN(age) || age < r.age_range[0] || age > r.age_range[1]) {
         qualifies = false;
-        reasons.push(
-          isTamil
-            ? `வயது தகுதி இல்லை — இந்த திட்டம் ${r.age_range[0]}–${r.age_range[1]} வயதுக்கு மட்டுமே`
-            : `Age not eligible — scheme is for ages ${r.age_range[0]}–${r.age_range[1]} only`
-        );
+        reasons.push(isTamil
+          ? `வயது தகுதி இல்லை — இந்த திட்டம் ${r.age_range[0]}–${r.age_range[1]} வயதுக்கு மட்டுமே`
+          : `Age not eligible — scheme is for ages ${r.age_range[0]}–${r.age_range[1]} only`);
       }
     }
-
-    if (r.gender && ans.gender) {
-      if (ans.gender !== r.gender) {
-        qualifies = false;
-        reasons.push(
-          isTamil
-            ? `பாலினம் தகுதி இல்லை — இந்த திட்டம் ${r.gender === "Female" ? "பெண்களுக்கு" : "ஆண்களுக்கு"} மட்டுமே`
-            : `Gender not eligible — scheme is for ${r.gender} applicants only`
-        );
-      }
+    if (r.gender && ans.gender && ans.gender !== r.gender) {
+      qualifies = false;
+      reasons.push(isTamil
+        ? `பாலினம் தகுதி இல்லை — இந்த திட்டம் ${r.gender === "Female" ? "பெண்களுக்கு" : "ஆண்களுக்கு"} மட்டுமே`
+        : `Gender not eligible — scheme is for ${r.gender} applicants only`);
     }
-
-    if (r.income_limit_annual && ans.income) {
-      if (ans.income === "high") {
-        qualifies = false;
-        reasons.push(
-          isTamil
-            ? `வருமான வரம்பு மீறியது — ₹${r.income_limit_annual.toLocaleString("en-IN")}க்கு கீழே இருக்க வேண்டும்`
-            : `Income too high — must be below ₹${r.income_limit_annual.toLocaleString("en-IN")}`
-        );
-      }
+    if (r.income_limit_annual && ans.income === "high") {
+      qualifies = false;
+      reasons.push(isTamil
+        ? `வருமான வரம்பு மீறியது — ₹${r.income_limit_annual.toLocaleString("en-IN")}க்கு கீழே இருக்க வேண்டும்`
+        : `Income too high — must be below ₹${r.income_limit_annual.toLocaleString("en-IN")}`);
     }
-
     return { qualifies, reasons };
   }
 
-  function restart() {
-    setStep(0);
-    setAnswers({});
-    setResult(null);
+  function restart() { setStep(0); setAnswers({}); setResult(null); }
+
+  // Open to everyone
+  if (questions.length === 0) {
+    return (
+      <div style={{position:"fixed", inset:0, background:"rgba(0,0,0,0.55)", zIndex:200, display:"flex", alignItems:"center", justifyContent:"center", padding:"16px"}}>
+        <div style={{background:"white", borderRadius:"24px", padding:"28px 24px", maxWidth:"400px", width:"100%", boxShadow:"0 20px 60px rgba(0,0,0,0.2)", textAlign:"center"}}>
+          <div style={{fontSize:"56px", marginBottom:"12px"}}>✅</div>
+          <p style={{fontSize:"var(--fs-title)", fontWeight:"700", color:"#166534", margin:"0 0 8px"}}>{isTamil ? "நீங்கள் தகுதியானவர்!" : "You qualify!"}</p>
+          <p style={{fontSize:"var(--fs-body)", color:"#6b7280", margin:"0 0 20px", lineHeight:"1.6"}}>{isTamil ? "இந்த திட்டம் அனைவருக்கும் திறந்திருக்கிறது." : "This scheme is open to everyone. You can apply right away."}</p>
+          <a href={s.official_application_url} target="_blank" rel="noopener noreferrer"
+            style={{display:"block", background:"#15803d", color:"white", borderRadius:"12px", padding:"12px", fontSize:"var(--fs-body)", fontWeight:"600", textDecoration:"none", marginBottom:"10px"}}>
+            {isTamil ? "இப்போது விண்ணப்பிக்க ↗" : "Apply Now ↗"}
+          </a>
+          <button onClick={onClose} style={{background:"none", border:"none", fontSize:"var(--fs-body)", color:"#9ca3af", cursor:"pointer"}}>{isTamil ? "மூடு" : "Close"}</button>
+        </div>
+      </div>
+    );
   }
 
-  const q       = questions[step];
-  const isTamil = lang === 1;
+  const q = questions[step];
 
   return (
     <div style={{position:"fixed", inset:0, background:"rgba(0,0,0,0.55)", zIndex:200, display:"flex", alignItems:"center", justifyContent:"center", padding:"16px"}}>
-      <div style={{background:"white", borderRadius:"24px", padding:"0", maxWidth:"420px", width:"100%", boxShadow:"0 20px 60px rgba(0,0,0,0.2)", overflow:"hidden"}}>
+      <div style={{background:"white", borderRadius:"24px", maxWidth:"420px", width:"100%", boxShadow:"0 20px 60px rgba(0,0,0,0.2)", overflow:"hidden"}}>
 
         {/* Header */}
         <div style={{background:"linear-gradient(135deg, #0d6e4f, #1a8a63)", padding:"20px 24px"}}>
-          <div style={{display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:"12px"}}>
-            <p style={{fontSize:"14px", fontWeight:"700", color:"white", margin:"0"}}>
-              🎯 {isTamil ? "தகுதி சரிபார்ப்பு" : "Eligibility Check"}
-            </p>
-            <button onClick={onClose} style={{background:"rgba(255,255,255,0.2)", border:"none", borderRadius:"8px", width:"28px", height:"28px", cursor:"pointer", color:"white", fontSize:"14px", display:"flex", alignItems:"center", justifyContent:"center"}}>
-              ✕
-            </button>
+          <div style={{display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:"8px"}}>
+            <p style={{fontSize:"var(--fs-body)", fontWeight:"700", color:"white", margin:"0"}}>🎯 {isTamil ? "தகுதி சரிபார்ப்பு" : "Eligibility Check"}</p>
+            <button onClick={onClose} style={{background:"rgba(255,255,255,0.2)", border:"none", borderRadius:"8px", width:"28px", height:"28px", cursor:"pointer", color:"white", fontSize:"14px", display:"flex", alignItems:"center", justifyContent:"center"}}>✕</button>
           </div>
-          <p style={{fontSize:"12px", color:"rgba(255,255,255,0.8)", margin:"0 0 12px", lineHeight:"1.4"}}>
-            {isTamil ? s.name_regional : s.name_english}
-          </p>
-          {/* Progress bar */}
+          <p style={{fontSize:"var(--fs-small)", color:"rgba(255,255,255,0.8)", margin:"0 0 12px", lineHeight:"1.4"}}>{isTamil ? s.name_regional : s.name_english}</p>
           {!result && (
             <div style={{background:"rgba(255,255,255,0.2)", borderRadius:"999px", height:"4px"}}>
-              <div style={{background:"white", borderRadius:"999px", height:"4px", width:`${((step) / questions.length) * 100}%`, transition:"width 0.3s"}} />
+              <div style={{background:"white", borderRadius:"999px", height:"4px", width:`${(step / questions.length) * 100}%`, transition:"width 0.3s"}} />
             </div>
           )}
         </div>
 
         <div style={{padding:"24px"}}>
-          {/* Result screen */}
           {result ? (
             <div style={{textAlign:"center"}}>
               {result.qualifies ? (
                 <>
                   <div style={{fontSize:"56px", marginBottom:"12px"}}>✅</div>
-                  <p style={{fontSize:"20px", fontWeight:"700", color:"#166534", margin:"0 0 6px"}}>
-                    {isTamil ? "நீங்கள் தகுதியானவர்!" : "You qualify!"}
-                  </p>
-                  <p style={{fontSize:"13px", color:"#6b7280", margin:"0 0 6px"}}>
-                    {isTamil ? "இந்த திட்டத்திற்கு உடனே விண்ணப்பிக்கலாம்." : "You can apply for this scheme right away."}
-                  </p>
-
-                  {/* Next steps */}
+                  <p style={{fontSize:"var(--fs-title)", fontWeight:"700", color:"#166534", margin:"0 0 6px"}}>{isTamil ? "நீங்கள் தகுதியானவர்!" : "You qualify!"}</p>
+                  <p style={{fontSize:"var(--fs-body)", color:"#6b7280", margin:"0 0 12px"}}>{isTamil ? "இந்த திட்டத்திற்கு உடனே விண்ணப்பிக்கலாம்." : "You can apply for this scheme right away."}</p>
                   <div style={{background:"#f0fdf4", border:"1px solid #bbf7d0", borderRadius:"12px", padding:"14px", marginBottom:"16px", textAlign:"left"}}>
-                    <p style={{fontSize:"11px", fontWeight:"700", color:"#166534", margin:"0 0 8px", textTransform:"uppercase", letterSpacing:"0.06em"}}>
-                      {isTamil ? "அடுத்த படிகள்" : "Next steps"}
-                    </p>
-                    <p style={{fontSize:"12px", color:"#166534", margin:"0 0 6px", lineHeight:"1.6"}}>
-                      📋 {isTamil ? "தேவையான ஆவணங்களை சேகரிக்கவும்" : "Gather the required documents"}
-                    </p>
-                    <p style={{fontSize:"12px", color:"#166534", margin:"0 0 6px", lineHeight:"1.6"}}>
-                      🗺 {isTamil
-                        ? (s.application_modality_tamil || s.application_modality)
-                        : s.application_modality}
-                    </p>
+                    <p style={{fontSize:"var(--fs-small)", fontWeight:"700", color:"#166534", margin:"0 0 8px", textTransform:"uppercase", letterSpacing:"0.06em"}}>{isTamil ? "அடுத்த படிகள்" : "Next steps"}</p>
+                    <p style={{fontSize:"var(--fs-body)", color:"#166534", margin:"0 0 6px", lineHeight:"1.6"}}>📋 {isTamil ? "தேவையான ஆவணங்களை சேகரிக்கவும்" : "Gather the required documents"}</p>
+                    <p style={{fontSize:"var(--fs-body)", color:"#166534", margin:"0", lineHeight:"1.6"}}>🗺 {isTamil ? (s.application_modality_tamil || s.application_modality) : s.application_modality}</p>
                   </div>
-
                   <a href={s.official_application_url} target="_blank" rel="noopener noreferrer"
-                    style={{display:"block", background:"#15803d", color:"white", borderRadius:"12px", padding:"13px", fontSize:"14px", fontWeight:"600", textDecoration:"none", marginBottom:"10px", boxShadow:"0 2px 8px rgba(13,110,79,0.3)"}}>
+                    style={{display:"block", background:"#15803d", color:"white", borderRadius:"12px", padding:"13px", fontSize:"var(--fs-body)", fontWeight:"600", textDecoration:"none", marginBottom:"10px", boxShadow:"0 2px 8px rgba(13,110,79,0.3)"}}>
                     {isTamil ? "இப்போது விண்ணப்பிக்க ↗" : "Apply Now ↗"}
                   </a>
                 </>
               ) : (
                 <>
                   <div style={{fontSize:"56px", marginBottom:"12px"}}>❌</div>
-                  <p style={{fontSize:"20px", fontWeight:"700", color:"#b91c1c", margin:"0 0 6px"}}>
-                    {isTamil ? "தகுதி இல்லை" : "Not eligible"}
-                  </p>
-                  <p style={{fontSize:"13px", color:"#6b7280", margin:"0 0 12px"}}>
-                    {isTamil ? "இந்த திட்டத்திற்கு நீங்கள் தகுதியற்றவர்." : "You don't meet the criteria for this scheme."}
-                  </p>
-
-                  {/* Reasons */}
-                  <div style={{background:"#fef2f2", border:"1px solid #fecaca", borderRadius:"12px", padding:"14px", marginBottom:"16px", textAlign:"left"}}>
-                    <p style={{fontSize:"11px", fontWeight:"700", color:"#b91c1c", margin:"0 0 8px", textTransform:"uppercase", letterSpacing:"0.06em"}}>
-                      {isTamil ? "காரணம்" : "Reason"}
-                    </p>
-                    {result.reasons.map((r, i) => (
-                      <p key={i} style={{fontSize:"12px", color:"#b91c1c", margin:"0 0 4px", lineHeight:"1.6"}}>
-                        • {r}
-                      </p>
+                  <p style={{fontSize:"var(--fs-title)", fontWeight:"700", color:"#b91c1c", margin:"0 0 6px"}}>{isTamil ? "தகுதி இல்லை" : "Not eligible"}</p>
+                  <p style={{fontSize:"var(--fs-body)", color:"#6b7280", margin:"0 0 12px"}}>{isTamil ? "இந்த திட்டத்திற்கு நீங்கள் தகுதியற்றவர்." : "You don't meet the criteria for this scheme."}</p>
+                  <div style={{background:"#fef2f2", border:"1px solid #fecaca", borderRadius:"12px", padding:"14px", marginBottom:"12px", textAlign:"left"}}>
+                    <p style={{fontSize:"var(--fs-small)", fontWeight:"700", color:"#b91c1c", margin:"0 0 8px", textTransform:"uppercase", letterSpacing:"0.06em"}}>{isTamil ? "காரணம்" : "Reason"}</p>
+                    {result.reasons.map((reason, i) => (
+                      <p key={i} style={{fontSize:"var(--fs-body)", color:"#b91c1c", margin:"0 0 4px", lineHeight:"1.6"}}>• {reason}</p>
                     ))}
                   </div>
-
                   <div style={{background:"#fffbeb", border:"1px solid #fcd34d", borderRadius:"12px", padding:"12px", marginBottom:"16px", textAlign:"left"}}>
-                    <p style={{fontSize:"12px", color:"#92400e", margin:"0", lineHeight:"1.6"}}>
-                      💡 {isTamil
-                        ? "மற்ற திட்டங்களை பார்க்க, தகுதி கணிப்பானை பயன்படுத்துங்கள்."
-                        : "Use the eligibility calculator to find schemes you do qualify for."}
+                    <p style={{fontSize:"var(--fs-body)", color:"#92400e", margin:"0", lineHeight:"1.6"}}>
+                      💡 {isTamil ? "மற்ற திட்டங்களை பார்க்க, தகுதி கணிப்பானை பயன்படுத்துங்கள்." : "Use the eligibility calculator to find schemes you do qualify for."}
                     </p>
                   </div>
                 </>
               )}
-
               <div style={{display:"flex", gap:"8px"}}>
-                <button onClick={restart}
-                  style={{flex:1, background:"none", border:"1px solid #e5e7eb", borderRadius:"10px", padding:"10px", fontSize:"13px", color:"#6b7280", cursor:"pointer"}}>
+                <button onClick={restart} style={{flex:1, background:"none", border:"1px solid #e5e7eb", borderRadius:"10px", padding:"10px", fontSize:"var(--fs-body)", color:"#6b7280", cursor:"pointer"}}>
                   {isTamil ? "மீண்டும் முயற்சி" : "Try again"}
                 </button>
-                <button onClick={onClose}
-                  style={{flex:1, background:"#f3f4f6", border:"none", borderRadius:"10px", padding:"10px", fontSize:"13px", color:"#374151", cursor:"pointer", fontWeight:"500"}}>
+                <button onClick={onClose} style={{flex:1, background:"#f3f4f6", border:"none", borderRadius:"10px", padding:"10px", fontSize:"var(--fs-body)", color:"#374151", cursor:"pointer", fontWeight:"500"}}>
                   {isTamil ? "மூடு" : "Close"}
                 </button>
               </div>
             </div>
-
           ) : (
-            /* Question screen */
             <div>
-              <p style={{fontSize:"16px", fontWeight:"700", color:"#1a1a2e", margin:"0 0 4px", lineHeight:"1.4"}}>
-                {isTamil ? q.question_ta : q.question_en}
-              </p>
-              <p style={{fontSize:"12px", color:"#9ca3af", margin:"0 0 20px", lineHeight:"1.5"}}>
-                💡 {isTamil ? q.hint_ta : q.hint_en}
-              </p>
+              <p style={{fontSize:"var(--fs-title)", fontWeight:"700", color:"#1a1a2e", margin:"0 0 4px", lineHeight:"1.4"}}>{isTamil ? q.question_ta : q.question_en}</p>
+              <p style={{fontSize:"var(--fs-small)", color:"#9ca3af", margin:"0 0 20px", lineHeight:"1.5"}}>💡 {isTamil ? q.hint_ta : q.hint_en}</p>
 
               {q.type === "number" && (
                 <div>
@@ -455,16 +358,12 @@ function EligibilityChecker({ scheme, lang, onClose }) {
                     type="number"
                     placeholder={isTamil ? q.placeholder_ta : q.placeholder_en}
                     autoFocus
+                    id="checker-input"
                     style={{width:"100%", border:"1.5px solid #d1d5db", borderRadius:"12px", padding:"14px", fontSize:"20px", textAlign:"center", boxSizing:"border-box", outline:"none", color:"#1a1a2e", marginBottom:"14px", fontWeight:"600"}}
                     onKeyDown={e => { if (e.key === "Enter" && e.target.value) answer(e.target.value); }}
-                    id="checker-input"
                   />
-                  <button
-                    onClick={() => {
-                      const val = document.getElementById("checker-input").value;
-                      if (val) answer(val);
-                    }}
-                    style={{width:"100%", background:"#15803d", color:"white", border:"none", borderRadius:"12px", padding:"13px", fontSize:"14px", fontWeight:"600", cursor:"pointer"}}>
+                  <button onClick={() => { const v = document.getElementById("checker-input").value; if (v) answer(v); }}
+                    style={{width:"100%", background:"#15803d", color:"white", border:"none", borderRadius:"12px", padding:"13px", fontSize:"var(--fs-body)", fontWeight:"600", cursor:"pointer"}}>
                     {isTamil ? "அடுத்து →" : "Next →"}
                   </button>
                 </div>
@@ -474,18 +373,12 @@ function EligibilityChecker({ scheme, lang, onClose }) {
                 <div style={{display:"flex", flexDirection:"column", gap:"10px"}}>
                   {q.options.map(opt => (
                     <button key={opt.value} onClick={() => answer(opt.value)}
-                      style={{
-                        width:"100%", border:"1.5px solid #e5e7eb", borderRadius:"14px",
-                        padding:"16px", fontSize:"15px", fontWeight:"600", cursor:"pointer",
-                        background:"white", color:"#1a1a2e", textAlign:"left",
-                        display:"flex", alignItems:"center", gap:"12px",
-                        transition:"all 0.1s",
-                      }}
+                      style={{width:"100%", border:"1.5px solid #e5e7eb", borderRadius:"14px", padding:"16px", fontSize:"var(--fs-body)", fontWeight:"600", cursor:"pointer", background:"white", color:"#1a1a2e", textAlign:"left", display:"flex", alignItems:"center", gap:"12px"}}
                       onMouseEnter={e => { e.currentTarget.style.borderColor="#15803d"; e.currentTarget.style.background="#f0fdf4"; }}
                       onMouseLeave={e => { e.currentTarget.style.borderColor="#e5e7eb"; e.currentTarget.style.background="white"; }}
                     >
                       <span style={{width:"32px", height:"32px", borderRadius:"50%", background:"#f0fdf4", display:"flex", alignItems:"center", justifyContent:"center", fontSize:"16px", flexShrink:0}}>
-                        {opt.value === "Female" ? "👩" : opt.value === "Male" ? "👨" : opt.value === "low" ? "✓" : "✗"}
+                        {opt.icon}
                       </span>
                       {isTamil ? opt.label_ta : opt.label_en}
                     </button>
@@ -493,8 +386,7 @@ function EligibilityChecker({ scheme, lang, onClose }) {
                 </div>
               )}
 
-              {/* Step indicator */}
-              <p style={{textAlign:"center", fontSize:"12px", color:"#9ca3af", marginTop:"16px"}}>
+              <p style={{textAlign:"center", fontSize:"var(--fs-small)", color:"#9ca3af", marginTop:"16px"}}>
                 {isTamil ? `கேள்வி ${step + 1} / ${questions.length}` : `Question ${step + 1} of ${questions.length}`}
               </p>
             </div>
@@ -504,141 +396,107 @@ function EligibilityChecker({ scheme, lang, onClose }) {
     </div>
   );
 }
+
 // ── Scheme card ───────────────────────────────────────────────────
 function SchemeCard({ scheme, lang, expanded, onToggle }) {
   const s  = scheme;
   const [checkerOpen, setCheckerOpen] = useState(false);
-  const dt = deptTheme(s.department);
+  const dt      = deptTheme(s.department);
   const name    = lang === 1 ? s.name_regional : s.name_english;
   const subname = lang === 1 ? s.name_english  : s.name_regional;
   const benefit = lang === 1 && s.benefits_tamil ? s.benefits_tamil : s.benefits;
 
   return (
-    <div style={{
-      background: C.card, borderRadius:"20px", marginBottom:"14px",
-      border:`1px solid ${C.border}`, overflow:"hidden",
-      boxShadow:"0 1px 4px rgba(0,0,0,0.06)",
-      transition:"box-shadow 0.2s",
-    }}>
-      {/* Color accent bar */}
+    <div style={{background:C.card, borderRadius:"20px", marginBottom:"14px", border:`1px solid ${C.border}`, overflow:"hidden", boxShadow:"0 1px 4px rgba(0,0,0,0.06)"}}>
+      {/* Accent bar */}
       <div style={{height:"4px", background:`linear-gradient(90deg, ${dt.color}, ${dt.color}88)`}} />
 
       <div style={{padding:"16px"}}>
-        {/* Top row */}
-        <div style={{display:"flex", justifyContent:"space-between", alignItems:"flex-start", gap:"10px", marginBottom:"10px"}}>
-          <div style={{flex:1, minWidth:0}}>
-            {/* Dept pill */}
-            <div style={{display:"inline-flex", alignItems:"center", gap:"4px", background:dt.bg, border:`1px solid ${dt.border}`, borderRadius:"6px", padding:"2px 8px", marginBottom:"6px"}}>
-              <span style={{fontSize:"12px"}}>{dt.icon}</span>
-              <span style={{fontSize:"11px", color:dt.color, fontWeight:"600"}}>{s.department}</span>
-            </div>
-            <p style={{fontWeight:"700", fontSize:"15px", margin:"0", lineHeight:"1.3", color:C.text}}>{name}</p>
-            <p style={{fontSize:"12px", color:C.textMuted, margin:"3px 0 0"}}>{subname}</p>
+        {/* Dept pill + name */}
+        <div style={{marginBottom:"10px"}}>
+          <div style={{display:"inline-flex", alignItems:"center", gap:"4px", background:dt.bg, border:`1px solid ${dt.border}`, borderRadius:"6px", padding:"2px 8px", marginBottom:"6px"}}>
+            <span style={{fontSize:"12px"}}>{dt.icon}</span>
+            <span style={{fontSize:"var(--fs-small)", color:dt.color, fontWeight:"600"}}>{s.department}</span>
           </div>
+          <p style={{fontWeight:"700", fontSize:"var(--fs-title)", margin:"0", lineHeight:"1.3", color:C.text}}>{name}</p>
+          <p style={{fontSize:"var(--fs-small)", color:C.textMuted, margin:"3px 0 0"}}>{subname}</p>
         </div>
 
-        {/* Benefit highlight box */}
+        {/* Benefit box */}
         <div style={{background:C.surface, borderRadius:"12px", padding:"12px 14px", marginBottom:"12px", borderLeft:`3px solid ${C.primary}`}}>
-          <p style={{fontSize:"13px", color:C.text, margin:"0", lineHeight:"1.6", fontWeight:"500"}}>{benefit}</p>
+          <p style={{fontSize:"var(--fs-body)", color:C.text, margin:"0", lineHeight:"1.6", fontWeight:"500"}}>{benefit}</p>
         </div>
 
-        {/* Footer row */}
+        {/* Footer */}
         <div style={{display:"flex", alignItems:"center", justifyContent:"space-between", flexWrap:"wrap", gap:"8px"}}>
           <div style={{display:"flex", alignItems:"center", gap:"8px", flexWrap:"wrap"}}>
             <DeadlineBadge scheme={s} lang={lang} />
-            <button onClick={onToggle} style={{fontSize:"12px", color:C.primary, background:"none", border:"none", cursor:"pointer", padding:"0", fontWeight:"500", textDecoration:"underline", textUnderlineOffset:"2px"}}>
+            <button onClick={onToggle} style={{fontSize:"var(--fs-small)", color:C.primary, background:"none", border:"none", cursor:"pointer", padding:"0", fontWeight:"500", textDecoration:"underline", textUnderlineOffset:"2px"}}>
               {expanded ? tx("hideDetails", lang) : tx("seeDetails", lang)}
             </button>
           </div>
-          <button
-  onClick={() => setCheckerOpen(true)}
-  style={{
-    display:"inline-flex", alignItems:"center", gap:"4px",
-    background:"white", color:C.primary,
-    border:`1.5px solid ${C.primary}`,
-    borderRadius:"10px", padding:"8px 14px",
-    fontSize:"12px", fontWeight:"600", cursor:"pointer",
-  }}
->
-  🎯 {lang === 1 ? "தகுதி உண்டா?" : "Am I eligible?"}
-</button>
-          <a href={s.official_application_url} target="_blank" rel="noopener noreferrer"
-            style={{
-              display:"inline-flex", alignItems:"center", gap:"4px",
-              background:C.primary, color:C.white, borderRadius:"10px",
-              padding:"8px 16px", fontSize:"12px", fontWeight:"600",
-              textDecoration:"none", boxShadow:"0 2px 6px rgba(13,110,79,0.3)",
-            }}>
-            {tx("applyNow", lang)}
-          </a>
+          <div style={{display:"flex", gap:"8px", flexWrap:"wrap"}}>
+            <button onClick={() => setCheckerOpen(true)} style={{display:"inline-flex", alignItems:"center", gap:"4px", background:"white", color:C.primary, border:`1.5px solid ${C.primary}`, borderRadius:"10px", padding:"8px 14px", fontSize:"var(--fs-small)", fontWeight:"600", cursor:"pointer"}}>
+              🎯 {lang === 1 ? "தகுதி உண்டா?" : "Am I eligible?"}
+            </button>
+            <a href={s.official_application_url} target="_blank" rel="noopener noreferrer"
+              style={{display:"inline-flex", alignItems:"center", gap:"4px", background:C.primary, color:C.white, borderRadius:"10px", padding:"8px 16px", fontSize:"var(--fs-small)", fontWeight:"600", textDecoration:"none", boxShadow:"0 2px 6px rgba(13,110,79,0.3)"}}>
+              {tx("applyNow", lang)}
+            </a>
+          </div>
         </div>
       </div>
 
       {/* Expanded panel */}
       {expanded && (
         <div style={{borderTop:`1px solid ${C.border}`, background:C.surface, padding:"16px"}}>
-
-          {/* Eligibility */}
-          <p style={{fontSize:"11px", fontWeight:"700", color:C.textSub, marginBottom:"8px", textTransform:"uppercase", letterSpacing:"0.08em"}}>
-            {tx("eligibility", lang)}
-          </p>
+          <p style={{fontSize:"var(--fs-small)", fontWeight:"700", color:C.textSub, marginBottom:"8px", textTransform:"uppercase", letterSpacing:"0.08em"}}>{tx("eligibility", lang)}</p>
           <div style={{display:"flex", flexWrap:"wrap", gap:"6px", marginBottom:"16px"}}>
             {s.eligibility_rules.gender && (
-              <span style={{fontSize:"12px", background:C.white, border:`1px solid ${C.border}`, borderRadius:"8px", padding:"5px 12px", fontWeight:"500"}}>
+              <span style={{fontSize:"var(--fs-body)", background:C.white, border:`1px solid ${C.border}`, borderRadius:"8px", padding:"5px 12px", fontWeight:"500"}}>
                 {s.eligibility_rules.gender === "Female" ? "👩 " : "👨 "}
                 {lang === 1 ? (s.eligibility_rules.gender === "Female" ? "பெண்" : "ஆண்") : s.eligibility_rules.gender}
               </span>
             )}
             {s.eligibility_rules.age_range && (
-              <span style={{fontSize:"12px", background:C.white, border:`1px solid ${C.border}`, borderRadius:"8px", padding:"5px 12px", fontWeight:"500"}}>
+              <span style={{fontSize:"var(--fs-body)", background:C.white, border:`1px solid ${C.border}`, borderRadius:"8px", padding:"5px 12px", fontWeight:"500"}}>
                 🎂 {lang === 1 ? `வயது ${s.eligibility_rules.age_range[0]}–${s.eligibility_rules.age_range[1]}` : `Age ${s.eligibility_rules.age_range[0]}–${s.eligibility_rules.age_range[1]}`}
               </span>
             )}
             {s.eligibility_rules.income_limit_annual && (
-              <span style={{fontSize:"12px", background:C.white, border:`1px solid ${C.border}`, borderRadius:"8px", padding:"5px 12px", fontWeight:"500"}}>
+              <span style={{fontSize:"var(--fs-body)", background:C.white, border:`1px solid ${C.border}`, borderRadius:"8px", padding:"5px 12px", fontWeight:"500"}}>
                 💰 {lang === 1 ? `வருமானம் ≤₹${s.eligibility_rules.income_limit_annual.toLocaleString("en-IN")}` : `Income ≤₹${s.eligibility_rules.income_limit_annual.toLocaleString("en-IN")}`}
               </span>
             )}
             {!s.eligibility_rules.gender && !s.eligibility_rules.age_range && !s.eligibility_rules.income_limit_annual && (
-              <span style={{fontSize:"12px", color:C.primary, background:C.primaryLight, borderRadius:"8px", padding:"5px 12px", fontWeight:"500"}}>
+              <span style={{fontSize:"var(--fs-body)", color:C.primary, background:C.primaryLight, borderRadius:"8px", padding:"5px 12px", fontWeight:"500"}}>
                 ✓ {lang === 1 ? "அனைவருக்கும் பொருந்தும்" : "Open to everyone"}
               </span>
             )}
           </div>
 
-          {/* Documents */}
-          <p style={{fontSize:"11px", fontWeight:"700", color:C.textSub, marginBottom:"10px", textTransform:"uppercase", letterSpacing:"0.08em"}}>
-            {tx("documents", lang)}
-          </p>
+          <p style={{fontSize:"var(--fs-small)", fontWeight:"700", color:C.textSub, marginBottom:"10px", textTransform:"uppercase", letterSpacing:"0.08em"}}>{tx("documents", lang)}</p>
           <div style={{display:"grid", gridTemplateColumns:"1fr 1fr", gap:"6px", marginBottom:"16px"}}>
             {s.documents_required.map((d, i) => (
               <div key={i} style={{display:"flex", alignItems:"center", gap:"8px", background:C.white, border:`1px solid ${C.border}`, borderRadius:"8px", padding:"8px 10px"}}>
                 <span style={{width:"20px", height:"20px", borderRadius:"6px", background:C.primaryLight, display:"flex", alignItems:"center", justifyContent:"center", fontSize:"11px", flexShrink:0}}>📄</span>
-                <span style={{fontSize:"12px", color:C.text, lineHeight:"1.3"}}>
+                <span style={{fontSize:"var(--fs-small)", color:C.text, lineHeight:"1.3"}}>
                   {lang === 1 && s.documents_tamil?.[i] ? s.documents_tamil[i] : d}
                 </span>
               </div>
             ))}
           </div>
 
-          {/* How to apply */}
-          <p style={{fontSize:"11px", fontWeight:"700", color:C.textSub, marginBottom:"6px", textTransform:"uppercase", letterSpacing:"0.08em"}}>
-            {tx("howToApply", lang)}
-          </p>
+          <p style={{fontSize:"var(--fs-small)", fontWeight:"700", color:C.textSub, marginBottom:"6px", textTransform:"uppercase", letterSpacing:"0.08em"}}>{tx("howToApply", lang)}</p>
           <div style={{background:C.white, border:`1px solid ${C.border}`, borderRadius:"10px", padding:"12px 14px"}}>
-            <p style={{fontSize:"13px", color:C.text, margin:"0", lineHeight:"1.6"}}>
+            <p style={{fontSize:"var(--fs-body)", color:C.text, margin:"0", lineHeight:"1.6"}}>
               🗺 {lang === 1 && s.application_modality_tamil ? s.application_modality_tamil : s.application_modality}
             </p>
           </div>
         </div>
       )}
-      {checkerOpen && (
-        <EligibilityChecker
-          scheme={s}
-          lang={lang}
-          onClose={() => setCheckerOpen(false)}
-        />
-      )}
+
+      {checkerOpen && <EligibilityChecker scheme={s} lang={lang} onClose={() => setCheckerOpen(false)} />}
     </div>
   );
 }
@@ -660,40 +518,25 @@ function EligibilityCalc({ lang, onMatch, onClose }) {
     onMatch(ids);
   }
 
-  const iS = {
-    width:"100%", border:`1px solid ${C.borderMid}`, borderRadius:"10px",
-    padding:"10px 14px", fontSize:"14px", marginBottom:"10px",
-    background:C.white, boxSizing:"border-box", display:"block", outline:"none",
-    color: C.text,
-  };
+  const iS = { width:"100%", border:`1px solid ${C.borderMid}`, borderRadius:"10px", padding:"10px 14px", fontSize:"var(--fs-body)", marginBottom:"10px", background:C.white, boxSizing:"border-box", display:"block", outline:"none", color:C.text };
 
   return (
     <div style={{background:"linear-gradient(135deg, #e6f4ef, #f0fdf4)", border:`1px solid #a7f3d0`, borderRadius:"20px", padding:"20px", marginBottom:"16px"}}>
       <div style={{display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:"16px"}}>
         <div>
-          <p style={{fontSize:"15px", fontWeight:"700", color:C.primary, margin:"0"}}>
-            🎯 {tx("match", lang)}
-          </p>
-          <p style={{fontSize:"12px", color:C.textSub, margin:"4px 0 0"}}>
-            {lang === 1 ? "உங்கள் விவரங்களை பதிவிடுங்கள்" : "Tell us about yourself"}
-          </p>
+          <p style={{fontSize:"var(--fs-body)", fontWeight:"700", color:C.primary, margin:"0"}}>🎯 {tx("match", lang)}</p>
+          <p style={{fontSize:"var(--fs-small)", color:C.textSub, margin:"4px 0 0"}}>{lang === 1 ? "உங்கள் விவரங்களை பதிவிடுங்கள்" : "Tell us about yourself"}</p>
         </div>
         <button onClick={onClose} style={{background:C.white, border:`1px solid ${C.border}`, borderRadius:"8px", width:"32px", height:"32px", cursor:"pointer", fontSize:"16px", display:"flex", alignItems:"center", justifyContent:"center", color:C.textSub}}>✕</button>
       </div>
-      <input type="number" placeholder={tx("age", lang)} value={profile.age}
-        onChange={e => setProfile({...profile, age:e.target.value})} style={iS} />
+      <input type="number" placeholder={tx("age", lang)} value={profile.age} onChange={e => setProfile({...profile, age:e.target.value})} style={iS} />
       <select value={profile.gender} onChange={e => setProfile({...profile, gender:e.target.value})} style={iS}>
         <option value="">{lang === 1 ? "பாலினம் தேர்ந்தெடுக்கவும்" : "Select gender"}</option>
         <option value="Female">{tx("female", lang)}</option>
         <option value="Male">{tx("male", lang)}</option>
       </select>
-      <input type="number" placeholder={tx("income", lang)} value={profile.income}
-        onChange={e => setProfile({...profile, income:e.target.value})} style={{...iS, marginBottom:"14px"}} />
-      <button onClick={run} style={{
-        width:"100%", background:C.primary, color:C.white, border:"none",
-        borderRadius:"12px", padding:"12px", fontSize:"14px", fontWeight:"600",
-        cursor:"pointer", boxShadow:"0 2px 8px rgba(13,110,79,0.3)",
-      }}>
+      <input type="number" placeholder={tx("income", lang)} value={profile.income} onChange={e => setProfile({...profile, income:e.target.value})} style={{...iS, marginBottom:"14px"}} />
+      <button onClick={run} style={{width:"100%", background:C.primary, color:C.white, border:"none", borderRadius:"12px", padding:"12px", fontSize:"var(--fs-body)", fontWeight:"600", cursor:"pointer", boxShadow:"0 2px 8px rgba(13,110,79,0.3)"}}>
         {tx("find", lang)}
       </button>
     </div>
@@ -702,12 +545,9 @@ function EligibilityCalc({ lang, onMatch, onClose }) {
 
 // ── Filter panel ──────────────────────────────────────────────────
 function FilterPanel({ lang, filters, setFilters, setMatchedIds, deptOptions, setShowCalc }) {
-  const label = (text) => (
-    <p style={{fontSize:"11px", fontWeight:"700", color:C.textSub, textTransform:"uppercase", letterSpacing:"0.08em", marginBottom:"8px", marginTop:0}}>
-      {text}
-    </p>
+  const sLabel = (text) => (
+    <p style={{fontSize:"var(--fs-small)", fontWeight:"700", color:C.textSub, textTransform:"uppercase", letterSpacing:"0.08em", marginBottom:"8px", marginTop:0}}>{text}</p>
   );
-
   function setDept(v)   { setFilters(f => ({...f, dept:   v})); setMatchedIds(null); }
   function setGender(v) { setFilters(f => ({...f, gender: v})); setMatchedIds(null); }
   function setStatus(v) { setFilters(f => ({...f, status: v})); setMatchedIds(null); }
@@ -715,48 +555,32 @@ function FilterPanel({ lang, filters, setFilters, setMatchedIds, deptOptions, se
   return (
     <div>
       <div style={{marginBottom:"20px"}}>
-        {label(tx("department", lang))}
+        {sLabel(tx("department", lang))}
         <div style={{display:"flex", flexWrap:"wrap", gap:"6px"}}>
           {deptOptions.map(o => {
             const dt = o === "All" ? null : deptTheme(o);
-            return (
-              <Chip key={o}
-                label={o === "All" ? tx("all", lang) : o}
-                icon={dt?.icon}
-                active={filters.dept === o}
-                onClick={() => setDept(o)}
-              />
-            );
+            return <Chip key={o} label={o === "All" ? tx("all", lang) : o} icon={dt?.icon} active={filters.dept === o} onClick={() => setDept(o)} />;
           })}
         </div>
       </div>
-
       <div style={{marginBottom:"20px"}}>
-        {label(tx("gender", lang))}
+        {sLabel(tx("gender", lang))}
         <div style={{display:"flex", flexWrap:"wrap", gap:"6px"}}>
           {[["All","",tx("all",lang)],["Female","👩",tx("female",lang)],["Male","👨",tx("male",lang)]].map(([val,icon,lbl]) => (
             <Chip key={val} label={lbl} icon={icon} active={filters.gender === val} onClick={() => setGender(val)} />
           ))}
         </div>
       </div>
-
       <div style={{marginBottom:"20px"}}>
-        {label(tx("status", lang))}
+        {sLabel(tx("status", lang))}
         <div style={{display:"flex", flexWrap:"wrap", gap:"6px"}}>
           {[["All","",tx("all",lang)],["open","✅",tx("open",lang)],["recurring","🔄",tx("recurring",lang)]].map(([val,icon,lbl]) => (
             <Chip key={val} label={lbl} icon={icon} active={filters.status === val} onClick={() => setStatus(val)} />
           ))}
         </div>
       </div>
-
       <div style={{borderTop:`1px solid ${C.border}`, paddingTop:"16px"}}>
-        <button onClick={() => setShowCalc(v => !v)} style={{
-          width:"100%", background:"linear-gradient(135deg, #0d6e4f, #1a8a63)",
-          color:C.white, border:"none", borderRadius:"12px", padding:"11px",
-          fontSize:"13px", fontWeight:"600", cursor:"pointer",
-          boxShadow:"0 2px 8px rgba(13,110,79,0.25)",
-          display:"flex", alignItems:"center", justifyContent:"center", gap:"6px",
-        }}>
+        <button onClick={() => setShowCalc(v => !v)} style={{width:"100%", background:`linear-gradient(135deg, #0d6e4f, #1a8a63)`, color:C.white, border:"none", borderRadius:"12px", padding:"11px", fontSize:"var(--fs-body)", fontWeight:"600", cursor:"pointer", boxShadow:"0 2px 8px rgba(13,110,79,0.25)", display:"flex", alignItems:"center", justifyContent:"center", gap:"6px"}}>
           🎯 {tx("match", lang)}
         </button>
       </div>
@@ -764,7 +588,7 @@ function FilterPanel({ lang, filters, setFilters, setMatchedIds, deptOptions, se
   );
 }
 
-// ── Root component ────────────────────────────────────────────────
+// ── Root ──────────────────────────────────────────────────────────
 export default function App() {
   const isMobile = useIsMobile();
 
@@ -772,6 +596,14 @@ export default function App() {
     const s = localStorage.getItem("pref_lang");
     return s !== null ? Number(s) : 1;
   });
+
+  const [fontSize, setFontSize] = useState(() => {
+    return localStorage.getItem("pref_fontsize") ?? "normal";
+  });
+
+  useEffect(() => {
+    document.documentElement.setAttribute("data-fontsize", fontSize);
+  }, [fontSize]);
 
   const [showOnboarding, setShowOnboarding] = useState(() => {
     try { return localStorage.getItem("userProfile") === null; } catch { return true; }
@@ -788,9 +620,22 @@ export default function App() {
   const [expanded, setExpanded]                   = useState(null);
 
   const deptOptions = ["All", ...new Set(schemesData.map(s => s.department))];
-  
+
   function handleLangToggle() {
     setLang(p => { const n = p === 0 ? 1 : 0; localStorage.setItem("pref_lang", n); return n; });
+  }
+
+  function cycleFontSize() {
+    const order = ["normal", "large", "xl"];
+    const next  = order[(order.indexOf(fontSize) + 1) % order.length];
+    setFontSize(next);
+    localStorage.setItem("pref_fontsize", next);
+  }
+
+  function resetProfile() {
+    localStorage.removeItem("userProfile");
+    setUserProfile({});
+    setShowOnboarding(true);
   }
 
   function handleOnboardingDone(profile) {
@@ -837,43 +682,37 @@ export default function App() {
   return (
     <div style={{minHeight:"100vh", background:C.bg}}>
 
-      {/* ── Top nav ── */}
+      {/* Nav */}
       <div style={{background:C.white, borderBottom:`1px solid ${C.border}`, position:"sticky", top:0, zIndex:100, boxShadow:"0 1px 8px rgba(0,0,0,0.06)"}}>
         <div style={{maxWidth:"1000px", margin:"0 auto", padding: isMobile ? "12px 16px" : "14px 24px", display:"flex", alignItems:"center", justifyContent:"space-between", gap:"12px"}}>
           <div style={{display:"flex", alignItems:"center", gap:"10px"}}>
-            <div style={{width:"36px", height:"36px", background:`linear-gradient(135deg, ${C.primary}, ${C.primaryMid})`, borderRadius:"10px", display:"flex", alignItems:"center", justifyContent:"center", fontSize:"18px", flexShrink:0}}>
-              🏛
-            </div>
+            <div style={{width:"36px", height:"36px", background:`linear-gradient(135deg, ${C.primary}, ${C.primaryMid})`, borderRadius:"10px", display:"flex", alignItems:"center", justifyContent:"center", fontSize:"18px", flexShrink:0}}>🏛</div>
             <div>
-              <p style={{fontSize: isMobile ? "13px" : "15px", fontWeight:"700", margin:"0", color:C.text, lineHeight:"1.2"}}>
-                {tx("title", lang)}
-              </p>
-              {!isMobile && (
-                <p style={{fontSize:"11px", color:C.textMuted, margin:"1px 0 0"}}>{tx("subtitle", lang)}</p>
-              )}
+              <p style={{fontSize: isMobile ? "13px" : "var(--fs-body)", fontWeight:"700", margin:"0", color:C.text, lineHeight:"1.2"}}>{tx("title", lang)}</p>
+              {!isMobile && <p style={{fontSize:"var(--fs-small)", color:C.textMuted, margin:"1px 0 0"}}>{tx("subtitle", lang)}</p>}
             </div>
           </div>
-          <div style={{display:"flex", alignItems:"center", gap:"8px", flexShrink:0}}>
+          <div style={{display:"flex", alignItems:"center", gap:"6px", flexShrink:0}}>
             {!isMobile && (
-              <span style={{fontSize:"11px", color:C.primary, background:C.primaryLight, border:`1px solid #a7f3d0`, padding:"4px 10px", borderRadius:"999px", fontWeight:"500"}}>
+              <span style={{fontSize:"var(--fs-small)", color:C.primary, background:C.primaryLight, border:`1px solid #a7f3d0`, padding:"4px 10px", borderRadius:"999px", fontWeight:"500"}}>
                 ✓ {tx("offline", lang)}
               </span>
             )}
-            <button onClick={() => { localStorage.removeItem("userProfile"); setUserProfile({}); setShowOnboarding(true); }}
-  style={{
-    fontSize:"12px", border:`1.5px solid ${C.border}`, borderRadius:"8px",
-    padding:"6px 10px", color:C.textSub, background:C.white, cursor:"pointer",
-    fontWeight:"500",
-  }}
-  title="Reset profile"
->
-  👤
-</button>
-            <button onClick={handleLangToggle} style={{
-              fontSize:"12px", border:`1.5px solid ${C.border}`, borderRadius:"8px",
-              padding:"6px 12px", color:C.text, background:C.white, cursor:"pointer",
-              fontWeight:"600", minWidth:"52px",
-            }}>
+            {/* Font size toggle */}
+            <button onClick={cycleFontSize}
+              style={{fontSize:"12px", border:`1.5px solid ${C.border}`, borderRadius:"8px", padding:"6px 10px", color:C.text, background:C.white, cursor:"pointer", fontWeight:"700", minWidth:"44px"}}
+              title="Change text size">
+              {FONT_SIZES[fontSize].label}
+            </button>
+            {/* Profile reset */}
+            <button onClick={resetProfile}
+              style={{fontSize:"12px", border:`1.5px solid ${C.border}`, borderRadius:"8px", padding:"6px 10px", color:C.textSub, background:C.white, cursor:"pointer"}}
+              title="Reset profile">
+              👤
+            </button>
+            {/* Language toggle */}
+            <button onClick={handleLangToggle}
+              style={{fontSize:"12px", border:`1.5px solid ${C.border}`, borderRadius:"8px", padding:"6px 12px", color:C.text, background:C.white, cursor:"pointer", fontWeight:"600", minWidth:"52px"}}>
               {tx("langToggle", lang)}
             </button>
           </div>
@@ -882,58 +721,45 @@ export default function App() {
 
       <div style={{maxWidth:"1000px", margin:"0 auto", padding: isMobile ? "16px 12px" : "24px 24px"}}>
 
-        {/* Stats */}
         <StatBar data={schemesData} lang={lang} />
 
         {/* Profile banner */}
         {hasProfile && (
           <div style={{background:"linear-gradient(135deg, #e6f4ef, #f0fdf4)", border:`1px solid #a7f3d0`, borderRadius:"14px", padding:"12px 16px", marginBottom:"16px", display:"flex", alignItems:"center", justifyContent:"space-between", flexWrap:"wrap", gap:"8px"}}>
-            <p style={{fontSize:"13px", color:C.primary, margin:"0", fontWeight:"500"}}>
+            <p style={{fontSize:"var(--fs-body)", color:C.primary, margin:"0", fontWeight:"500"}}>
               👤 {tx("filteredFor", lang)}
-              {userProfile.age       && <span style={{background:C.white, borderRadius:"6px", padding:"1px 6px", marginLeft:"6px", fontSize:"12px"}}>🎂 {userProfile.age}</span>}
-              {userProfile.gender    && <span style={{background:C.white, borderRadius:"6px", padding:"1px 6px", marginLeft:"4px", fontSize:"12px"}}>{userProfile.gender === "Female" ? "👩" : "👨"} {userProfile.gender}</span>}
-              {userProfile.community && <span style={{background:C.white, borderRadius:"6px", padding:"1px 6px", marginLeft:"4px", fontSize:"12px"}}>⭐ {userProfile.community}</span>}
+              {userProfile.age       && <span style={{background:C.white, borderRadius:"6px", padding:"1px 6px", marginLeft:"6px", fontSize:"var(--fs-small)"}}>🎂 {userProfile.age}</span>}
+              {userProfile.gender    && <span style={{background:C.white, borderRadius:"6px", padding:"1px 6px", marginLeft:"4px", fontSize:"var(--fs-small)"}}>{userProfile.gender === "Female" ? "👩" : "👨"} {userProfile.gender}</span>}
+              {userProfile.community && <span style={{background:C.white, borderRadius:"6px", padding:"1px 6px", marginLeft:"4px", fontSize:"var(--fs-small)"}}>⭐ {userProfile.community}</span>}
             </p>
-            <button onClick={() => { localStorage.removeItem("userProfile"); setUserProfile({}); setShowOnboarding(true); }}
-              style={{fontSize:"12px", color:C.primary, background:C.white, border:`1px solid #a7f3d0`, borderRadius:"8px", padding:"5px 12px", cursor:"pointer", fontWeight:"500"}}>
+            <button onClick={resetProfile}
+              style={{fontSize:"var(--fs-small)", color:C.primary, background:C.white, border:`1px solid #a7f3d0`, borderRadius:"8px", padding:"5px 12px", cursor:"pointer", fontWeight:"500"}}>
               ✏ {tx("changeProfile", lang)}
             </button>
           </div>
         )}
 
-        {/* Search bar */}
+        {/* Search */}
         <div style={{position:"relative", marginBottom:"16px"}}>
           <span style={{position:"absolute", left:"14px", top:"50%", transform:"translateY(-50%)", fontSize:"16px", pointerEvents:"none"}}>🔍</span>
           <input
-            style={{
-              width:"100%", border:`1.5px solid ${C.border}`, borderRadius:"14px",
-              padding:"12px 14px 12px 42px", fontSize:"14px", background:C.white,
-              outline:"none", boxSizing:"border-box", color:C.text,
-              boxShadow:"0 1px 4px rgba(0,0,0,0.04)",
-            }}
+            style={{width:"100%", border:`1.5px solid ${C.border}`, borderRadius:"14px", padding:"12px 14px 12px 42px", fontSize:"var(--fs-body)", background:C.white, outline:"none", boxSizing:"border-box", color:C.text, boxShadow:"0 1px 4px rgba(0,0,0,0.04)"}}
             placeholder={tx("search", lang)}
             value={search}
             onChange={e => { setSearch(e.target.value); setMatchedIds(null); }}
           />
           {isMobile && (
-            <button onClick={() => setShowMobileFilters(v => !v)} style={{
-              position:"absolute", right:"8px", top:"50%", transform:"translateY(-50%)",
-              background: showMobileFilters ? C.primary : C.surface,
-              color: showMobileFilters ? C.white : C.textSub,
-              border:"none", borderRadius:"10px", padding:"6px 12px",
-              fontSize:"12px", fontWeight:"600", cursor:"pointer",
-            }}>
+            <button onClick={() => setShowMobileFilters(v => !v)}
+              style={{position:"absolute", right:"8px", top:"50%", transform:"translateY(-50%)", background: showMobileFilters ? C.primary : C.surface, color: showMobileFilters ? C.white : C.textSub, border:"none", borderRadius:"10px", padding:"6px 12px", fontSize:"var(--fs-small)", fontWeight:"600", cursor:"pointer"}}>
               ⚙ {tx("filters", lang)}
             </button>
           )}
         </div>
 
-        {/* Mobile filter drawer */}
+        {/* Mobile filters */}
         {isMobile && showMobileFilters && (
           <div style={{background:C.white, border:`1px solid ${C.border}`, borderRadius:"16px", padding:"16px", marginBottom:"16px", boxShadow:"0 4px 16px rgba(0,0,0,0.08)"}}>
-            <FilterPanel lang={lang} filters={filters} setFilters={setFilters}
-              setMatchedIds={setMatchedIds} deptOptions={deptOptions}
-              setShowCalc={setShowCalc} isMobile={isMobile} />
+            <FilterPanel lang={lang} filters={filters} setFilters={setFilters} setMatchedIds={setMatchedIds} deptOptions={deptOptions} setShowCalc={setShowCalc} />
           </div>
         )}
 
@@ -947,10 +773,8 @@ export default function App() {
         {/* Match banner */}
         {matchedIds && (
           <div style={{background:"linear-gradient(135deg, #e6f4ef, #ecfdf5)", border:`1px solid #a7f3d0`, borderRadius:"14px", padding:"12px 16px", marginBottom:"16px", display:"flex", alignItems:"center", justifyContent:"space-between"}}>
-            <p style={{fontSize:"13px", color:C.primary, fontWeight:"600", margin:"0"}}>
-              🎯 {matchedIds.length} {tx("matched", lang)}
-            </p>
-            <button onClick={() => setMatchedIds(null)} style={{fontSize:"12px", color:C.primary, background:C.white, border:`1px solid #a7f3d0`, borderRadius:"8px", padding:"4px 12px", cursor:"pointer", fontWeight:"500"}}>
+            <p style={{fontSize:"var(--fs-body)", color:C.primary, fontWeight:"600", margin:"0"}}>🎯 {matchedIds.length} {tx("matched", lang)}</p>
+            <button onClick={() => setMatchedIds(null)} style={{fontSize:"var(--fs-small)", color:C.primary, background:C.white, border:`1px solid #a7f3d0`, borderRadius:"8px", padding:"4px 12px", cursor:"pointer", fontWeight:"500"}}>
               ✕ {tx("resetMatch", lang)}
             </button>
           </div>
@@ -958,24 +782,15 @@ export default function App() {
 
         {/* Main layout */}
         <div style={{display:"grid", gridTemplateColumns: isMobile ? "1fr" : "240px 1fr", gap:"20px", alignItems:"start"}}>
-
-          {/* Desktop sidebar */}
           {!isMobile && (
             <div style={{background:C.white, border:`1px solid ${C.border}`, borderRadius:"20px", padding:"20px", position:"sticky", top:"80px", boxShadow:"0 1px 4px rgba(0,0,0,0.04)"}}>
-              <FilterPanel lang={lang} filters={filters} setFilters={setFilters}
-                setMatchedIds={setMatchedIds} deptOptions={deptOptions}
-                setShowCalc={setShowCalc} isMobile={false} />
+              <FilterPanel lang={lang} filters={filters} setFilters={setFilters} setMatchedIds={setMatchedIds} deptOptions={deptOptions} setShowCalc={setShowCalc} />
             </div>
           )}
-
-          {/* Cards area */}
           <div>
-            <div style={{display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:"14px"}}>
-              <p style={{fontSize:"13px", color:C.textMuted, margin:"0", fontWeight:"500"}}>
-                {tx("showing", lang)} <span style={{color:C.text, fontWeight:"700"}}>{filtered.length}</span> {tx("schemes", lang)}
-              </p>
-            </div>
-
+            <p style={{fontSize:"var(--fs-small)", color:C.textMuted, margin:"0 0 14px", fontWeight:"500"}}>
+              {tx("showing", lang)} <span style={{color:C.text, fontWeight:"700"}}>{filtered.length}</span> {tx("schemes", lang)}
+            </p>
             {filtered.length === 0
               ? <EmptyState lang={lang} onClear={clearAll} />
               : filtered.map(s => (
@@ -988,10 +803,7 @@ export default function App() {
         </div>
       </div>
 
-      {/* Onboarding */}
-      {showOnboarding && (
-        <OnboardingModal lang={lang} onDone={handleOnboardingDone} />
-      )}
+      {showOnboarding && <OnboardingModal lang={lang} onDone={handleOnboardingDone} />}
     </div>
   );
 }
